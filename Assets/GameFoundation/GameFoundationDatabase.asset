@@ -1,0 +1,680 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d6d794703b5406883240f543e5b084, type: 3}
+  m_Name: GameFoundationDatabase
+  m_EditorClassIdentifier: 
+  m_GameItemCatalog: {fileID: 114011820482598258}
+  m_InventoryCatalog: {fileID: 114145726102970138}
+  m_StatCatalog: {fileID: 114366963149954348}
+--- !u!114 &114011820482598258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7bd278f724ab94d891fb484af87b44, type: 3}
+  m_Name: _Catalog_GameItems
+  m_EditorClassIdentifier: 
+  m_Categories: []
+  m_Definitions:
+  - {fileID: 114282915615077708}
+  - {fileID: 114393838538956260}
+  - {fileID: 114978434367636980}
+  - {fileID: 114458880724348944}
+  - {fileID: 114970356296254666}
+  - {fileID: 114867906003582770}
+  - {fileID: 114071317181116200}
+  - {fileID: 114075317796721288}
+  - {fileID: 114790833776749372}
+  - {fileID: 114371395955172666}
+  - {fileID: 114765220918101272}
+  - {fileID: 114102969101550282}
+  - {fileID: 114455670588050244}
+  - {fileID: 114203728936761646}
+  - {fileID: 114017339254579716}
+--- !u!114 &114017339254579716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: grenadeChest_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Grenade Chest
+  m_Id: grenadeChest
+  m_Hash: -451411892
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues: []
+--- !u!114 &114025878435944904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: poison_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114458880724348944}
+  m_StatDefaultIntValues_Keys: 
+  m_StatDefaultIntValues_Values: 
+  m_StatDefaultFloatValues_Keys: 1323dace0460d964a37892056c54c8115d9daa9d
+  m_StatDefaultFloatValues_Values:
+  - 500
+  - 1.5
+  - 3
+  - 7
+  - 10
+--- !u!114 &114049426148880466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: smallHP_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114790833776749372}
+  m_StatDefaultIntValues_Keys: 
+  m_StatDefaultIntValues_Values: 
+  m_StatDefaultFloatValues_Keys: ae7e28a9
+  m_StatDefaultFloatValues_Values:
+  - 15
+--- !u!114 &114071317181116200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: boss_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Troll
+  m_Id: boss
+  m_Hash: 1056859706
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114121435692235654}
+--- !u!114 &114075317796721288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: bigHP_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Health Kit
+  m_Id: bigHP
+  m_Hash: 2108498661
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114796891881556730}
+--- !u!114 &114102969101550282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: bothAmmoChest_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Assorted Ammo Chest
+  m_Id: bothAmmoChest
+  m_Hash: -625613263
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114695344492509928}
+--- !u!114 &114121435692235654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: boss_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114071317181116200}
+  m_StatDefaultIntValues_Keys: 
+  m_StatDefaultIntValues_Values: 
+  m_StatDefaultFloatValues_Keys: 0460d9646c54c8111323dace5d9daa9d
+  m_StatDefaultFloatValues_Values:
+  - 3
+  - 40
+  - 5000
+  - 6
+--- !u!114 &114123126745696232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99a121bc2d8644fcb8f5f5ed98363908, type: 3}
+  m_Name: wallet_Inventory
+  m_EditorClassIdentifier: 
+  m_DisplayName: Wallet
+  m_Id: wallet
+  m_Hash: 2087227935
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues: []
+  m_DefaultItems: []
+--- !u!114 &114145726102970138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48b084f2c338a4185ab8badeed2a3947, type: 3}
+  m_Name: _Catalog_Inventories
+  m_EditorClassIdentifier: 
+  m_Categories:
+  - m_Id: healItem
+    m_Hash: -1096477526
+    m_DisplayName: Healing Items
+  - m_Id: powerup
+    m_Hash: -1701525115
+    m_DisplayName: Buff Items
+  - m_Id: cleanse
+    m_Hash: -238061644
+    m_DisplayName: Debuff Removal
+  m_CollectionDefinitions:
+  - {fileID: 114420246014581416}
+  - {fileID: 114123126745696232}
+  m_ItemDefinitions: []
+  m_DefaultCollectionDefinitions: []
+--- !u!114 &114199902676478304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: stealth_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114978434367636980}
+  m_StatDefaultIntValues_Keys: 
+  m_StatDefaultIntValues_Values: 
+  m_StatDefaultFloatValues_Keys: 1323dace0460d964cb1b45575d9daa9d6c54c811
+  m_StatDefaultFloatValues_Values:
+  - 500
+  - 1
+  - 30
+  - 14
+  - 7
+--- !u!114 &114203728936761646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: smallPotionChest_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Small Potion Chest
+  m_Id: smallPotionChest
+  m_Hash: -2047294150
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues: []
+--- !u!114 &114248697539807784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: flight_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114393838538956260}
+  m_StatDefaultIntValues_Keys: 
+  m_StatDefaultIntValues_Values: 
+  m_StatDefaultFloatValues_Keys: 1323dace6c54c8110460d9645d9daa9d
+  m_StatDefaultFloatValues_Values:
+  - 350
+  - 7
+  - 1
+  - 16
+--- !u!114 &114275013998425456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: rifleAmmoChest_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114371395955172666}
+  m_StatDefaultIntValues_Keys: dfba6091
+  m_StatDefaultIntValues_Values: 64000000
+  m_StatDefaultFloatValues_Keys: 
+  m_StatDefaultFloatValues_Values: []
+--- !u!114 &114282915615077708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: player_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Player
+  m_Id: player
+  m_Hash: -1743160731
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114370249200540692}
+--- !u!114 &114366963149954348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88f5bccd054f984d9be6ad05294da40, type: 3}
+  m_Name: _Catalog_Stats
+  m_EditorClassIdentifier: 
+  m_StatDefinitions:
+  - m_Id: health
+    m_IdHash: -824564973
+    m_DisplayName: Hit Point
+    m_StatValueType: 1
+  - m_Id: stamina
+    m_IdHash: 999083124
+    m_DisplayName: Stamina
+    m_StatValueType: 1
+  - m_Id: damage
+    m_IdHash: 298341484
+    m_DisplayName: Damage
+    m_StatValueType: 1
+  - m_Id: critical
+    m_IdHash: 1464146891
+    m_DisplayName: Critical Damage
+    m_StatValueType: 1
+  - m_Id: moveSpeed
+    m_IdHash: -1649762979
+    m_DisplayName: Move Speed
+    m_StatValueType: 1
+  - m_Id: attackSpeed
+    m_IdHash: 1691967492
+    m_DisplayName: Attack Speed
+    m_StatValueType: 1
+  - m_Id: dot
+    m_IdHash: 93485219
+    m_DisplayName: Damage Over Time
+    m_StatValueType: 1
+  - m_Id: heal
+    m_IdHash: -1456963922
+    m_DisplayName: Heal
+    m_StatValueType: 1
+  - m_Id: rifleAmmoRec
+    m_IdHash: -1855931681
+    m_DisplayName: AK47 Ammo
+    m_StatValueType: 0
+  - m_Id: handgunAmmoRec
+    m_IdHash: 664992139
+    m_DisplayName: Handgun Ammo
+    m_StatValueType: 0
+--- !u!114 &114370249200540692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: player_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114282915615077708}
+  m_StatDefaultIntValues_Keys: 
+  m_StatDefaultIntValues_Values: 
+  m_StatDefaultFloatValues_Keys: 1323dace74cc8c3b
+  m_StatDefaultFloatValues_Values:
+  - 100
+  - 100
+--- !u!114 &114371395955172666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: rifleAmmoChest_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: AK47 Ammo Chest
+  m_Id: rifleAmmoChest
+  m_Hash: -1798273648
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114275013998425456}
+--- !u!114 &114393838538956260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: flight_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Eagle
+  m_Id: flight
+  m_Hash: -1034426866
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114248697539807784}
+--- !u!114 &114420246014581416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99a121bc2d8644fcb8f5f5ed98363908, type: 3}
+  m_Name: main_Inventory
+  m_EditorClassIdentifier: 
+  m_DisplayName: Main
+  m_Id: main
+  m_Hash: -1087845020
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues: []
+  m_DefaultItems: []
+--- !u!114 &114455670588050244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: bigPotionChest_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Big Potion Chest
+  m_Id: bigPotionChest
+  m_Hash: -524618390
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues: []
+--- !u!114 &114458880724348944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: poison_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Spider Queen
+  m_Id: poison
+  m_Hash: -109831863
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114025878435944904}
+--- !u!114 &114695344492509928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: bothAmmoChest_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114102969101550282}
+  m_StatDefaultIntValues_Keys: dfba60918bf9a227
+  m_StatDefaultIntValues_Values: 4b00000019000000
+  m_StatDefaultFloatValues_Keys: 
+  m_StatDefaultFloatValues_Values: []
+--- !u!114 &114765220918101272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: handgunAmmoChest_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Handgun Ammo Chest
+  m_Id: handgunAmmoChest
+  m_Hash: -1512916184
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114872593539802366}
+--- !u!114 &114774074529919168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: stun_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114970356296254666}
+  m_StatDefaultIntValues_Keys: 
+  m_StatDefaultIntValues_Values: 
+  m_StatDefaultFloatValues_Keys: 1323dace0460d9646c54c8115d9daa9d
+  m_StatDefaultFloatValues_Values:
+  - 500
+  - 1.5
+  - 7
+  - 6
+--- !u!114 &114790833776749372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: smallHP_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Pill
+  m_Id: smallHP
+  m_Hash: 857913783
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114049426148880466}
+--- !u!114 &114796891881556730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: bigHP_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114075317796721288}
+  m_StatDefaultIntValues_Keys: 
+  m_StatDefaultIntValues_Values: 
+  m_StatDefaultFloatValues_Keys: ae7e28a9
+  m_StatDefaultFloatValues_Values:
+  - 80
+--- !u!114 &114849626516417702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: mob_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114867906003582770}
+  m_StatDefaultIntValues_Keys: 
+  m_StatDefaultIntValues_Values: 
+  m_StatDefaultFloatValues_Keys: 1323dace0460d9646c54c8115d9daa9d
+  m_StatDefaultFloatValues_Values:
+  - 400
+  - 1.5
+  - 5
+  - 10
+--- !u!114 &114867906003582770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: mob_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Goblin
+  m_Id: mob
+  m_Hash: -23595395
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114849626516417702}
+--- !u!114 &114872593539802366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: handgunAmmoChest_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114765220918101272}
+  m_StatDefaultIntValues_Keys: 8bf9a227
+  m_StatDefaultIntValues_Values: 1e000000
+  m_StatDefaultFloatValues_Keys: 
+  m_StatDefaultFloatValues_Values: []
+--- !u!114 &114970356296254666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: stun_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Mage
+  m_Id: stun
+  m_Hash: -210448114
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114774074529919168}
+--- !u!114 &114978434367636980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: stealth_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Wolf
+  m_Id: stealth
+  m_Hash: 1272993176
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114199902676478304}
