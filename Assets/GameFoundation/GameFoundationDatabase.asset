@@ -99,9 +99,10 @@ MonoBehaviour:
   m_Owner: {fileID: 114790833776749372}
   m_StatDefaultIntValues_Keys: 
   m_StatDefaultIntValues_Values: 
-  m_StatDefaultFloatValues_Keys: ae7e28a9
+  m_StatDefaultFloatValues_Keys: ae7e28a9373448b9
   m_StatDefaultFloatValues_Values:
-  - 15
+  - 50
+  - 20
 --- !u!114 &114071317181116200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,6 +377,10 @@ MonoBehaviour:
     m_IdHash: 664992139
     m_DisplayName: Handgun Ammo
     m_StatValueType: 0
+  - m_Id: regenAmount
+    m_IdHash: -1186450377
+    m_DisplayName: Regen Amount
+    m_StatValueType: 1
 --- !u!114 &114370249200540692
 MonoBehaviour:
   m_ObjectHideFlags: 0

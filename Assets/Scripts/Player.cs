@@ -21,7 +21,7 @@ public class Player : Entity {
     public Animator handgunAnimator;
     public Image gunImage;
     public Sprite autoGunSprite, handgunSprite;
-    FpsControllerLPFP controller;
+    internal FpsControllerLPFP controller;
     bool autogunMode = true;
 
     [Header("UI"), Range(0, 1)]
@@ -36,15 +36,26 @@ public class Player : Entity {
 
     public bool CanRun { get; private set; }
     public bool CanShoot { get; private set; } = true;
+    public bool IsRifleEquipped { get { return autoGunArms.activeInHierarchy; } }
+
+    List<Chest> chestsOpened = new List<Chest>();
     
     GameManager gameManager;
-    GameItem playerItem;
+    internal GameItem playerItem;
     float stamina;
     float criticalHealth;
     float staminaRecharge = 0;
+    bool end = false;
+
+    Coroutine regenCoroutine;
+
+    //Stats
+    internal float SmallPotHealAmount { get; private set; }
+    internal float SmallPotHealDuration { get; private set; }
 
     private void Start()
     {
+        
         gameManager = GameManager.Instance;
         GameItemDefinition playerDef = GameFoundationSettings.database.gameItemCatalog.GetGameItemDefinition("player");
         playerItem = new GameItem(playerDef, "mainPlayer");
@@ -57,12 +68,26 @@ public class Player : Entity {
         staminaBar.maxValue = stamina;
         hpBar.value = CurrentHealth;
         staminaBar.value = stamina;
+        gameManager.OnGameEnd += GameManager_OnGameEnd;
+        SwitchWeapon();
+        SwitchWeapon();
+    }
+
+    private void GameManager_OnGameEnd()
+    {
+        end = true;
     }
 
     protected override void Die()
     {
         //Game Over
-        Time.timeScale = 0;
+        gameManager.PlayerDie();
+    }
+
+    public override void Damage(float amount)
+    {
+        if(!end)
+            base.Damage(amount);
     }
 
     private void Update()
@@ -84,7 +109,10 @@ public class Player : Entity {
                 CanShoot = false;
                 crosshair.color = new Color(1, 1, 0);
                 chestText.SetActive(true);
-                if (Input.GetKeyDown(KeyCode.F)) StartCoroutine(OpenChest(c));
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    if(!chestsOpened.Contains(c)) StartCoroutine(OpenChest(c));
+                }
             }
             
         }
@@ -93,6 +121,7 @@ public class Player : Entity {
 
     private IEnumerator OpenChest(Chest c)
     {
+        chestsOpened.Add(c);
         yield return c.OpenChest();
         switch(c.Type)
         {
@@ -152,24 +181,7 @@ public class Player : Entity {
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (autogunMode)
-            {
-                autoGunArms.SetActive(false);
-                handgunArms.SetActive(true);
-                controller.ChangeArms(handgunArms.transform);
-                handgunAnimator.Play("Draw");
-                gunImage.sprite = handgunSprite;
-                autogunMode = false;
-            }
-            else
-            {
-                handgunArms.SetActive(false);
-                autoGunArms.SetActive(true);
-                controller.ChangeArms(autoGunArms.transform);
-                autoGunAnimator.Play("Draw");
-                gunImage.sprite = autoGunSprite;
-                autogunMode = true;
-            }
+            SwitchWeapon();
         }
         if(Input.GetKey(KeyCode.LeftShift))
         {
@@ -195,7 +207,7 @@ public class Player : Entity {
         {
             GameItem item = new GameItem(GameFoundationSettings.database.gameItemCatalog.GetGameItemDefinition("smallHP"));
             gameManager.UseSmallPotion();
-            HealHP(item.GetStatFloat(GameManager.DEF_HEAL));
+            RegenHP(item.GetStatFloat(GameManager.DEF_HEAL), item.GetStatFloat("regenAmount"));
         }
 
         if (Input.GetKeyDown(KeyCode.G) && gameManager.GrenadeAvailable)
@@ -205,6 +217,28 @@ public class Player : Entity {
 
         if (Input.GetMouseButton(1)) crosshair.gameObject.SetActive(false);
         else crosshair.gameObject.SetActive(true);
+    }
+
+    private void SwitchWeapon()
+    {
+        if (autogunMode)
+        {
+            autoGunArms.SetActive(false);
+            handgunArms.SetActive(true);
+            controller.ChangeArms(handgunArms.transform);
+            handgunAnimator.Play("Draw");
+            gunImage.sprite = handgunSprite;
+            autogunMode = false;
+        }
+        else
+        {
+            handgunArms.SetActive(false);
+            autoGunArms.SetActive(true);
+            controller.ChangeArms(autoGunArms.transform);
+            autoGunAnimator.Play("Draw");
+            gunImage.sprite = autoGunSprite;
+            autogunMode = true;
+        }
     }
 
     private void UpdateUI()
@@ -219,5 +253,28 @@ public class Player : Entity {
     void HealHP(float amount)
     {
         CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, playerItem.GetStatFloat(GameManager.DEF_HEALTH));
+    }
+
+    void RegenHP(float amount, float time)
+    {
+        if(regenCoroutine == null)
+            regenCoroutine = StartCoroutine(Regenerate());
+        SmallPotHealAmount += amount;
+        SmallPotHealDuration += time;
+    }
+
+    IEnumerator Regenerate()
+    {
+        while(SmallPotHealDuration > 0)
+        {
+            float tickHeal = SmallPotHealAmount * Time.deltaTime / SmallPotHealDuration;
+            HealHP(tickHeal);
+            SmallPotHealAmount -= tickHeal;
+            SmallPotHealDuration -= Time.deltaTime;
+            yield return null;
+        }
+
+        SmallPotHealAmount = 0;
+        SmallPotHealDuration = 0;
     }
 }

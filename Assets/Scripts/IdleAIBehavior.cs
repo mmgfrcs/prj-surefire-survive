@@ -24,13 +24,21 @@ public class IdleAIBehavior : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        time += Time.deltaTime;
-        if (Vector3.Distance(animator.transform.position, player.transform.position) > agent.stoppingDistance) animator.Play("Run");
-        else if (time >= atkSpeed)
+        if(!self.gameEnd)
         {
-            animator.Play("Attack");
-            time = 0;
+            time += Time.deltaTime;
+            float distance = Vector3.Distance(animator.transform.position, player.transform.position);
+            if ((distance <= self.detectDistance || self.hordeMode) && GameManager.Instance.enabled)
+            {
+                if (distance > agent.stoppingDistance) animator.Play("Run");
+                else if (time >= atkSpeed)
+                {
+                    animator.Play("Attack");
+                    time = 0;
+                }
+            }
         }
+
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

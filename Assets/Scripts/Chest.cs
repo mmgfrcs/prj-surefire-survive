@@ -16,6 +16,7 @@ public class Chest : MonoBehaviour
     public IEnumerator OpenChest()
     {
         chestOpener.opening = true;
+        SoundManager.PlaySound(GetComponent<AudioSource>(), SoundManager.SoundType.ChestOpen);
         yield return new WaitForSeconds(1f / chestOpener.speed);
     }
 
