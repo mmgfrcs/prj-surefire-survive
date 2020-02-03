@@ -102,7 +102,13 @@ public class GrenadeScript : MonoBehaviour {
 				//Toggle "explode" on explosive barrel object
 				hit.gameObject.GetComponent<ExplosiveBarrelScript> ().explode = true;
 			}
-		}
+
+            if (hit.GetComponent<Collider>().tag == "Enemy")
+            {
+                //Toggle "explode" on explosive barrel object
+                hit.gameObject.GetComponent<Enemy>().Damage(2500);
+            }
+        }
 
 		//Destroy the grenade object on explosion
 		Destroy (gameObject);

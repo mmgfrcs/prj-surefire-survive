@@ -8,6 +8,8 @@ using UnityEngine.GameFoundation;
 public class Enemy : Entity
 {
     public EnemyType type;
+    public float detectDistance;
+    [SerializeField] internal AudioSource audioSource;
 
     GameManager gm;
     NavMeshAgent agent;
@@ -17,6 +19,9 @@ public class Enemy : Entity
 
     internal float distance = 0;
     internal bool firstAtk = true;
+    internal bool hordeMode = false;
+    internal bool gameEnd = false;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -31,18 +36,25 @@ public class Enemy : Entity
         anim.SetFloat("Damage", enemyItem.GetStatFloat(GameManager.DEF_DAMAGE));
         anim.SetFloat("atkSpeed", enemyItem.GetStatFloat(GameManager.DEF_ATKSPEED));
         agent.speed = enemyItem.GetStatFloat(GameManager.DEF_MOVESPEED);
+        gm.OnGameEnd += OnGameEnd;
+    }
+
+    private void OnGameEnd()
+    {
+        gameEnd = true;
     }
 
     // Update is called once per frame
     void Update()
     {
         distance = Vector3.Distance(transform.position, gm.PlayerObject.transform.position);
-        
+        hordeMode = gm.IsHordeMode;
     }
 
     protected override void Die()
     {
         base.Die();
+        if(type == EnemyType.Boss) SoundManager.PlaySound(GetComponent<AudioSource>(), SoundManager.SoundType.TrollRoar);
         anim.Play("Death");
         StartCoroutine(DieDecompose(transform.position.y));
         GetComponent<Collider>().enabled = false;
@@ -60,6 +72,11 @@ public class Enemy : Entity
         }
 
         Destroy(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        gm.OnGameEnd -= OnGameEnd;
     }
 
     //private void OnGUI()

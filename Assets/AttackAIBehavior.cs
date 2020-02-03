@@ -7,10 +7,12 @@ public class AttackAIBehavior : StateMachineBehaviour
 {
     bool damage = false;
     float disengageDist;
+    Enemy self;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         damage = false;
+        self = animator.GetComponent<Enemy>();
         disengageDist = animator.GetComponent<NavMeshAgent>().stoppingDistance;
     }
 
@@ -21,7 +23,19 @@ public class AttackAIBehavior : StateMachineBehaviour
         if(!damage && stateInfo.normalizedTime * animator.GetInteger("totalFrame") > animator.GetInteger("damageFrame"))
         {
             if (Vector3.Distance(animator.transform.position, GameManager.Instance.PlayerObject.transform.position) <= disengageDist)
+            {
+                if(self.type == EnemyType.Mob)
+                {
+                    SoundManager.PlaySound(self.audioSource, SoundManager.SoundType.GoblinAttack);
+                    SoundManager.PlaySound(self.audioSource, SoundManager.SoundType.GoblinLaugh);
+                }
+                else if(self.type == EnemyType.Boss)
+                {
+                    SoundManager.PlaySound(self.audioSource, SoundManager.SoundType.TrollAttack);
+                }
                 GameManager.Instance.PlayerObject.Damage(animator.GetFloat("Damage"));
+            }
+                
             damage = true;
         }
     }
