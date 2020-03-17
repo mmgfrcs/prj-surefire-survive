@@ -179,8 +179,8 @@ MonoBehaviour:
   m_StatDefaultFloatValues_Values:
   - 3
   - 40
-  - 5000
-  - 6
+  - 25000
+  - 9
 --- !u!114 &114123126745696232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,7 +508,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Owner: {fileID: 114102969101550282}
   m_StatDefaultIntValues_Keys: dfba60918bf9a227
-  m_StatDefaultIntValues_Values: 4b00000019000000
+  m_StatDefaultIntValues_Values: 7800000041000000
   m_StatDefaultFloatValues_Keys: 
   m_StatDefaultFloatValues_Values: []
 --- !u!114 &114765220918101272
@@ -606,8 +606,8 @@ MonoBehaviour:
   m_StatDefaultFloatValues_Keys: 1323dace0460d9646c54c8115d9daa9d
   m_StatDefaultFloatValues_Values:
   - 400
-  - 1.5
-  - 5
+  - 1.25
+  - 1
   - 10
 --- !u!114 &114867906003582770
 MonoBehaviour:
@@ -642,7 +642,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Owner: {fileID: 114765220918101272}
   m_StatDefaultIntValues_Keys: 8bf9a227
-  m_StatDefaultIntValues_Values: 1e000000
+  m_StatDefaultIntValues_Values: 32000000
   m_StatDefaultFloatValues_Keys: 
   m_StatDefaultFloatValues_Values: []
 --- !u!114 &114970356296254666

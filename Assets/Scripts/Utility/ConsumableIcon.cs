@@ -6,6 +6,23 @@ public class ConsumableIcon : MonoBehaviour
 {
     public UnityEngine.UI.Image icon;
     public GameObject hotkeyText;
+    public GameObject durationBarParent;
+    public UnityEngine.UI.Image durationBar;
+
+    public void SetBarValue(float value)
+    {
+        durationBar.fillAmount = value;
+    }
+
+    public void DisableBar()
+    {
+        durationBarParent.SetActive(false);
+    }
+
+    public void EnableBar()
+    {
+        durationBarParent.SetActive(true);
+    }
 
     public void Disable()
     {

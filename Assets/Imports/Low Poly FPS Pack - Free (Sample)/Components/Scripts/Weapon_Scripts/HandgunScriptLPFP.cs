@@ -130,7 +130,11 @@ public class HandgunScriptLPFP : MonoBehaviour, IGun {
 	public TextMeshProUGUI currentAmmoText;
 	public TextMeshProUGUI totalAmmoText;
 
-	[System.Serializable]
+    public int CurrentAmmo => currentAmmo;
+    
+    public int CurrentMagazine => currentMags;
+
+    [System.Serializable]
 	public class prefabs
 	{  
 		[Header("Prefabs")]
@@ -168,9 +172,6 @@ public class HandgunScriptLPFP : MonoBehaviour, IGun {
 
 	private bool soundHasPlayed = false;
 
-    public int CurrentAmmo => currentAmmo;
-
-    public int CurrentMagazine => currentMags;
 
     private void Awake () 
 	{
@@ -372,24 +373,24 @@ public class HandgunScriptLPFP : MonoBehaviour, IGun {
 		}
 
 		//Toggle weapon holster when pressing E key
-		if (Input.GetKeyDown (KeyCode.E) && !hasBeenHolstered) 
-		{
-			holstered = true;
+		//if (Input.GetKeyDown (KeyCode.E) && !hasBeenHolstered) 
+		//{
+		//	holstered = true;
 
-			mainAudioSource.clip = SoundClips.holsterSound;
-			mainAudioSource.Play();
+		//	mainAudioSource.clip = SoundClips.holsterSound;
+		//	mainAudioSource.Play();
 
-			hasBeenHolstered = true;
-		} 
-		else if (Input.GetKeyDown (KeyCode.E) && hasBeenHolstered) 
-		{
-			holstered = false;
+		//	hasBeenHolstered = true;
+		//} 
+		//else if (Input.GetKeyDown (KeyCode.E) && hasBeenHolstered) 
+		//{
+		//	holstered = false;
 
-			mainAudioSource.clip = SoundClips.takeOutSound;
-			mainAudioSource.Play ();
+		//	mainAudioSource.clip = SoundClips.takeOutSound;
+		//	mainAudioSource.Play ();
 
-			hasBeenHolstered = false;
-		}
+		//	hasBeenHolstered = false;
+		//}
 
 		//Holster anim toggle
 		if (holstered == true) 

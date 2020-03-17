@@ -10,7 +10,6 @@ using System;
 
 public class Player : Entity {
 
-
     public AutomaticGunScriptLPFP autoGunScript;
     public HandgunScriptLPFP handgunScript;
 
@@ -34,6 +33,13 @@ public class Player : Entity {
     public Image crosshair;
     public GameObject chestText;
 
+    [Header("Debug - UI")]
+    public Slider hpBarDebug;
+    public TextMeshProUGUI healthTextDebug, currentAmmoDebugText, currentMagazineDebugText, gunNameDebugText;
+    public Slider staminaBarDebug;
+    public Image hpBarDebugFill;
+    public Image gunImageDebug;
+
     public bool CanRun { get; private set; }
     public bool CanShoot { get; private set; } = true;
     public bool IsRifleEquipped { get { return autoGunArms.activeInHierarchy; } }
@@ -52,6 +58,7 @@ public class Player : Entity {
     //Stats
     internal float SmallPotHealAmount { get; private set; }
     internal float SmallPotHealDuration { get; private set; }
+    internal float SmallPotHealMaxDuration { get; private set; }
 
     private void Start()
     {
@@ -68,6 +75,10 @@ public class Player : Entity {
         staminaBar.maxValue = stamina;
         hpBar.value = CurrentHealth;
         staminaBar.value = stamina;
+        hpBarDebug.maxValue = CurrentHealth;
+        staminaBarDebug.maxValue = stamina;
+        hpBarDebug.value = CurrentHealth;
+        staminaBarDebug.value = stamina;
         gameManager.OnGameEnd += GameManager_OnGameEnd;
         SwitchWeapon();
         SwitchWeapon();
@@ -245,9 +256,25 @@ public class Player : Entity {
     {
         hpBar.value = CurrentHealth;
         staminaBar.value = stamina;
+        hpBarDebug.value = CurrentHealth;
+        staminaBarDebug.value = stamina;
+        gunNameDebugText.text = autoGunScript.currentWeaponText.text;
+        currentAmmoDebugText.text = autoGunScript.currentAmmoText.text;
+        currentMagazineDebugText.text = autoGunScript.totalAmmoText.text;
+        gunImageDebug.sprite = gunImage.sprite;
+
+        healthTextDebug.text = $"{Mathf.Round(CurrentHealth)} <size=24>{playerItem.GetStatFloat(GameManager.DEF_HEALTH)}</size>";
         healthText.text = $"{Mathf.Round(CurrentHealth)} <size=24>{playerItem.GetStatFloat(GameManager.DEF_HEALTH)}</size>";
-        if (CurrentHealth <= criticalHealth) hpBarFill.color = criticalHPColor;
-        else hpBarFill.color = normalHPColor;
+        if (CurrentHealth <= criticalHealth)
+        {
+            hpBarFill.color = criticalHPColor;
+            hpBarDebugFill.color = criticalHPColor;
+        }
+        else
+        {
+            hpBarFill.color = normalHPColor;
+            hpBarDebugFill.color = normalHPColor;
+        }
     }
 
     void HealHP(float amount)
@@ -257,16 +284,17 @@ public class Player : Entity {
 
     void RegenHP(float amount, float time)
     {
-        if(regenCoroutine == null)
-            regenCoroutine = StartCoroutine(Regenerate());
         SmallPotHealAmount += amount;
+        SmallPotHealMaxDuration += time;
         SmallPotHealDuration += time;
+        if (regenCoroutine == null) regenCoroutine = StartCoroutine(Regenerate());
     }
 
     IEnumerator Regenerate()
     {
         while(SmallPotHealDuration > 0)
         {
+            gameManager.smallPotionIcon.SetBarValue(SmallPotHealDuration / SmallPotHealMaxDuration);
             float tickHeal = SmallPotHealAmount * Time.deltaTime / SmallPotHealDuration;
             HealHP(tickHeal);
             SmallPotHealAmount -= tickHeal;
@@ -276,5 +304,8 @@ public class Player : Entity {
 
         SmallPotHealAmount = 0;
         SmallPotHealDuration = 0;
+        SmallPotHealMaxDuration = 0;
+        gameManager.smallPotionIcon.DisableBar();
+        regenCoroutine = null;
     }
 }
