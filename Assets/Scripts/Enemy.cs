@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -35,7 +34,8 @@ public class Enemy : Entity
 
         anim.SetFloat("Damage", enemyItem.GetStatFloat(GameManager.DEF_DAMAGE));
         anim.SetFloat("atkSpeed", enemyItem.GetStatFloat(GameManager.DEF_ATKSPEED));
-        agent.speed = enemyItem.GetStatFloat(GameManager.DEF_MOVESPEED);
+        if (type == EnemyType.Mob) agent.speed = enemyItem.GetStatFloat(GameManager.DEF_MOVESPEED) * Random.Range(1f, 1.2f);
+        else agent.speed = enemyItem.GetStatFloat(GameManager.DEF_MOVESPEED);
         gm.OnGameEnd += OnGameEnd;
     }
 
