@@ -18,6 +18,9 @@ public enum GameState
 public class GameManager : MonoBehaviour {
     [Header("Debug")]
     public bool debugMode = true;
+    public bool printData = true;
+    public float printInterval = 1f;
+    [SerializeField] PrintType printFormat = PrintType.CSV;
     public TextMeshProUGUI debugText;
     public TextMeshProUGUI objectiveDebugText, timerDebugText;
 
@@ -125,6 +128,7 @@ public class GameManager : MonoBehaviour {
 
     bool BGMState = true;
     internal bool gameEnd = false;
+    DataPrinter printer;
 
     private void Awake()
     {
@@ -142,6 +146,16 @@ public class GameManager : MonoBehaviour {
     private void Start()
     {
         print(currentMap != null ? $"Map found on {currentMap.gameObject.name}" : "Map not found. Game cannot start");
+        if (currentMap == null) { 
+            enabled = false; 
+            return; 
+        }
+       
+        if(printData)
+        {
+            printer = new DataPrinter();
+            StartCoroutine(PrintGameDataPeriodic());
+        }
         hordeTimer = hordeDelay;
         initHandgunAmmo = player.handgunScript.ammo + player.handgunScript.magazine;
         initRifleAmmo = player.autoGunScript.ammo + player.autoGunScript.magazine;
@@ -525,6 +539,91 @@ public class GameManager : MonoBehaviour {
     internal void UseGrenade()
     {
         GrenadeAvailable = false;
+    }
+
+    IEnumerator PrintGameDataPeriodic()
+    {
+        while(!gameEnd)
+        {
+            yield return new WaitForSeconds(printInterval);
+            printer.Print(printFormat, new PrintData()
+            {
+                angerVal = anger,
+                bigPotionAvailable = BigPotionAvailable,
+                contemptVal = contempt,
+                currentState = CurrentState,
+                disgustVal = disgust,
+                distance = new Range(currentMap.AverageEnemyDistance, currentMap.MaxEnemyDistance, currentMap.MinEnemyDistance),
+                enemiesKilled = enemyDefeated,
+                enemyCount = currentMap.EnemyCount,
+                engagementVal = engagement,
+                faceDetected = ExpressionManager.FaceFound,
+                fearVal = fear,
+                FEREnabled = FEREnabled,
+                grenadeAvailable = GrenadeAvailable,
+                health = player.CurrentHealth,
+                hordeMode = hordeTimer < 1,
+                hordeTimer = Mathf.Abs(hordeTimer),
+                joyVal = joy,
+                maxEnemies = Mathf.RoundToInt(currentMap.currentMaxEnemy),
+                peakTimer = PeakStateTimer,
+                primaryAmmo = player.autoGunScript.CurrentAmmo,
+                primaryClip = player.autoGunScript.CurrentMagazine,
+                sadnessVal = sadness,
+                score = GetBaseScore() + GetEnemiesDefeatedScore(),
+                secondaryAmmo = player.handgunScript.CurrentAmmo,
+                secondaryClip = player.handgunScript.CurrentMagazine,
+                smallPotionAvailable = SmallPotionAvailable,
+                spawnRate = currentMap.currentSpawnRate,
+                stamina = player.CurrentStamina,
+                stressLevel = playerStressLevel,
+                stressRate = stressRate,
+                surpriseVal = surprise,
+                valenceVal = valence,
+                varAmmo = varAmmo,
+                varFER = varFER,
+                varHP = varHP
+            });
+        }
+
+        printer.Print(printFormat, new PrintData()
+        {
+            angerVal = anger,
+            bigPotionAvailable = BigPotionAvailable,
+            contemptVal = contempt,
+            currentState = CurrentState,
+            disgustVal = disgust,
+            distance = new Range(currentMap.AverageEnemyDistance, currentMap.MaxEnemyDistance, currentMap.MinEnemyDistance),
+            enemiesKilled = enemyDefeated,
+            enemyCount = currentMap.EnemyCount,
+            engagementVal = engagement,
+            faceDetected = ExpressionManager.FaceFound,
+            fearVal = fear,
+            FEREnabled = FEREnabled,
+            grenadeAvailable = GrenadeAvailable,
+            health = player.CurrentHealth,
+            hordeMode = hordeTimer < 1,
+            hordeTimer = Mathf.Abs( hordeTimer),
+            joyVal = joy,
+            maxEnemies = Mathf.RoundToInt(currentMap.currentMaxEnemy),
+            peakTimer = PeakStateTimer,
+            primaryAmmo = player.autoGunScript.CurrentAmmo,
+            primaryClip = player.autoGunScript.CurrentMagazine,
+            sadnessVal = sadness,
+            score = GetBaseScore(true) + GetEnemiesDefeatedScore(),
+            secondaryAmmo = player.handgunScript.CurrentAmmo,
+            secondaryClip = player.handgunScript.CurrentMagazine,
+            smallPotionAvailable = SmallPotionAvailable,
+            spawnRate = currentMap.currentSpawnRate,
+            stamina = player.CurrentStamina,
+            stressLevel = playerStressLevel,
+            stressRate = stressRate,
+            surpriseVal = surprise,
+            valenceVal = valence,
+            varAmmo = varAmmo,
+            varFER = varFER,
+            varHP = varHP
+        });
     }
 
 }

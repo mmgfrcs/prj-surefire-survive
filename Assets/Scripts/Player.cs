@@ -43,6 +43,7 @@ public class Player : Entity {
     public bool CanRun { get; private set; }
     public bool CanShoot { get; private set; } = true;
     public bool IsRifleEquipped { get { return autoGunArms.activeInHierarchy; } }
+    public float CurrentStamina { get { return stamina;  } }
 
     List<Chest> chestsOpened = new List<Chest>();
     
