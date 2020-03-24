@@ -7,9 +7,45 @@ using UnityEngine;
 
 class DataPrinter
 {
+    static int fileNo = -1;
     List<PrintData> dataList = new List<PrintData>();
+
+    internal void NextFile()
+    {
+        string path = Path.Combine(Application.dataPath, ".dataNo.txt");
+        if (fileNo == -1)
+        {
+            if (File.Exists(path))
+            {
+                using (TextReader reader = File.OpenText(path))
+                {
+                    string num = reader.ReadLine();
+                    if (num != null && int.TryParse(num, out int no)) fileNo = no;
+                    else
+                    {
+                        reader.Close();
+                        Debug.LogError("dataNo.txt is not in the correct format. Discarding file");
+                        fileNo = 1;
+                    }
+                }
+                File.WriteAllText(path, (++fileNo).ToString());
+            }
+            else
+            {
+                fileNo = 1;
+                File.WriteAllText(path, "1");
+            }
+        }
+        else
+        {
+            fileNo++;
+            File.WriteAllText(path, fileNo.ToString());
+        }
+    }
     internal void Print(PrintType type, PrintData data)
     {
+        if (fileNo == -1) NextFile();
+
         dataList.Add(data);
         Print(type);
     }
@@ -24,9 +60,9 @@ class DataPrinter
             {
                 List<string> lineContents = new List<string>();
                 lineContents.Add(data.enemyCount.ToString());
-                lineContents.Add(data.distance.avg.ToString());
-                lineContents.Add(data.distance.min.ToString());
-                lineContents.Add(data.distance.max.ToString());
+                lineContents.Add(data.distance.avg.ToString("n1"));
+                lineContents.Add(data.distance.min.ToString("n1"));
+                lineContents.Add(data.distance.max.ToString("n1"));
                 lineContents.Add(data.currentState.ToString());
                 lineContents.Add(data.maxEnemies.ToString());
                 lineContents.Add(data.spawnRate.ToString("n3"));
@@ -74,13 +110,9 @@ class DataPrinter
 
     string GetFilePath(string extension, string fileName = "data", string basePath = "DataFile")
     {
-        string path = Path.Combine(Application.dataPath, basePath);
-        string file = Path.Combine(path, $"{fileName}1.{extension}");
+        string path = Application.platform == RuntimePlatform.WindowsEditor ? Path.Combine(Application.dataPath, basePath + "~") : Path.Combine(Application.dataPath, basePath);
+        string file = Path.Combine(path, $"{fileName}{fileNo}.{extension}");
         if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-        for (int i = 2; File.Exists(file); i++)
-        {
-            file = Path.Combine(path, $"{fileName}{i}.{extension}");
-        }
         return file;
     }
 }
