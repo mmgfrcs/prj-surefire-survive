@@ -11,6 +11,7 @@
 /[Mm]emoryCaptures/
 /[Aa]ssets/Imports/Affdex/*
 /[Aa]ssets/StreamingAssets/*
+/[Aa]ssets/DataFile~/*
 
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
@@ -60,3 +61,5 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+[Aa]ssets/.dataNo.txt
