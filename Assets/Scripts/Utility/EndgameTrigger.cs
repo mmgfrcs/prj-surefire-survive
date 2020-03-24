@@ -6,7 +6,7 @@ public class EndgameTrigger : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
-            GameManager.Instance.StartBoss();
+        if (other.gameObject.tag == "Player")
+            GameManager.Instance.CompleteObjective(gameObject);
     }
 }

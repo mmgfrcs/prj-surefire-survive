@@ -25,14 +25,12 @@ public class GameManager : MonoBehaviour {
     public TextMeshProUGUI objectiveDebugText, timerDebugText;
 
     [Header("Game - General")]
-    public int keys = 2;
-    public string keyObjectiveText, gateObjectiveText, mazeObjectiveText, finalObjectiveText;
+    public ObjectiveBase[] objectives;
     public AudioSource dividerSource;
     public GameObject[] dividers;
     public GameObject finalWall;
     public NavMeshSurface pt1Surface;
     public NavMeshSurface pt2Surface;
-    public float timerDuration = 300;
     public float hordeDelay = 100, hordeTime = 30;
     public AnimationCurve FERCurve;
 
@@ -49,11 +47,10 @@ public class GameManager : MonoBehaviour {
     public GameState defaultState = GameState.Relax;
     public float buildUp1Probability = 0.334f;
     public float buildUp2Probability = 0.333f;
-    public float buildUp3Probability = 0.333f;
+    public float probabilityChange = 0.033f;
     public float maxFactor = 2, minFactor = 0.5f;
     public float timeToMax = 30, timeToMin = 15;
     [SerializeField] Detector detector;
-    [SerializeField] CameraInput cameraInput;
 
     [Header("UI")]
     public TextMeshProUGUI timerText;
@@ -67,11 +64,8 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager Instance;
 
-    [SerializeField]
-    Player player;
+    [SerializeField]  Player player;
 
-    GUIStyle style;
-    float time;
     float hordeTimer;
 
     //Gameplay
@@ -80,20 +74,19 @@ public class GameManager : MonoBehaviour {
     int initRifleAmmo, initHandgunAmmo;
     float stateWeight = 0;
 
+    //Objective
+    Queue<ObjectiveBase> objectiveQueue = new Queue<ObjectiveBase>();
+    ObjectiveBase currentObjective;
+
     //Statistics
-    List<Enemy> enemies = new List<Enemy>();
     int enemyDefeated = 0;
     int bossDefeated = 0;
-    float maxDist = 0;
-    float minDist = 0;
     float flowPerSecond = 0;
 
     private float varHP;
     private float varAmmo;
     private float varFER;
     private float stressRate;
-    int objectives = 0;
-    bool timer = false;
     float joy = 0, anger = 0, fear = 0, disgust = 0, sadness = 0, surprise = 0, valence = 0, contempt = 0, engagement = 0;
 
     //Stat Definition
@@ -129,11 +122,11 @@ public class GameManager : MonoBehaviour {
     bool BGMState = true;
     internal bool gameEnd = false;
     DataPrinter printer;
+    float[] buildUpProbabilities = new float[2];
 
     private void Awake()
     {
         GameFoundation.Initialize(); //Initialize Game Foundation
-        time = timerDuration;
         if (Instance == null)
             Instance = this;
         else Destroy(this);
@@ -167,13 +160,31 @@ public class GameManager : MonoBehaviour {
             detector.enabled = false;
             faceStatusImage.color = Color.green;
         }
+
+        buildUpProbabilities[0] = buildUp1Probability;
+        buildUpProbabilities[1] = buildUp2Probability;
+
+        foreach (ObjectiveBase objective in objectives)
+            objectiveQueue.Enqueue(objective);
+        currentObjective = objectiveQueue.Dequeue();
+
+        MakePoints();
     }
 
-    private void OnGUI()
+    private void MakePoints()
     {
+        const int n = 5;
+        const float r = 5;
 
+        float angle = 360f / n;
+
+        for (int i = 0; i < n; i++)
+        {
+            Vector3 start = player.transform.forward * r;
+            start = Quaternion.AngleAxis(angle * i, player.transform.up) * start;
+            new GameObject("Point" + i).transform.position = player.transform.position + start;
+        }
     }
-
 
     private void Update()
     {
@@ -182,18 +193,9 @@ public class GameManager : MonoBehaviour {
         CalculateStressLevel();
         UpdateUI();
 
-        if (timer)
+        if (currentObjective is FinalObjective && !gameEnd)
         {
-            time = Mathf.Max(time - Time.deltaTime, 0);
-            if (time <= 0)
-            {
-                //Victory
-                gameEnd = true;
-                timer = false;
-                currentMap.spawnEnemy = false;
-                GameOverManager.ShowPanel(true, GetBaseScore(true), enemyDefeated * scorePerEnemy, 0);
-                EndGame();
-            }
+            CompleteObjective();
         }
 
         if (CurrentState != GameState.Relax && CurrentState != GameState.Final) hordeTimer -= Time.deltaTime;
@@ -229,8 +231,8 @@ public class GameManager : MonoBehaviour {
                     if(playerStressLevel <= 0)
                     {
                         float rnd = UnityEngine.Random.Range(0, precision);
-                        float p1 = buildUp1Probability * precision;
-                        float p2 = buildUp2Probability * precision;
+                        float p1 = buildUpProbabilities[0] * precision;
+                        float p2 = buildUpProbabilities[1] * precision;
                         if (rnd < p1) CurrentState = GameState.BuildUp1;
                         else if (rnd >= p1 && rnd < p1 + p2) CurrentState = GameState.BuildUp2;
                         else CurrentState = GameState.BuildUp3;
@@ -240,6 +242,8 @@ public class GameManager : MonoBehaviour {
                 }
             case GameState.BuildUp1:
                 {
+                    buildUpProbabilities[0] -= probabilityChange;
+                    buildUpProbabilities[1] -= probabilityChange;
                     currentMap.spawnEnemy = true;
                     currentMap.currentSpawnRate = Mathf.Min(currentMap.currentSpawnRate + (currentMap.spawnRate * Time.deltaTime / timeToMax), currentMap.spawnRate * maxFactor);
                     currentMap.currentMaxEnemy = Mathf.Min(currentMap.currentMaxEnemy + (currentMap.maximumEnemy * Time.deltaTime / timeToMax), currentMap.maximumEnemy * maxFactor);
@@ -253,6 +257,8 @@ public class GameManager : MonoBehaviour {
                 }
             case GameState.BuildUp2:
                 {
+                    buildUpProbabilities[0] = buildUp1Probability;
+                    buildUpProbabilities[1] = buildUp2Probability;
                     currentMap.spawnEnemy = true;
                     if(currentMap.currentSpawnRate >= currentMap.spawnRate) currentMap.currentSpawnRate = Mathf.Max(currentMap.currentSpawnRate - (currentMap.spawnRate * Time.deltaTime / timeToMin), currentMap.spawnRate * minFactor);
                     else currentMap.currentSpawnRate = Mathf.Min(currentMap.currentSpawnRate + (currentMap.spawnRate * Time.deltaTime / timeToMax), currentMap.spawnRate * maxFactor);
@@ -268,6 +274,8 @@ public class GameManager : MonoBehaviour {
                 }
             case GameState.BuildUp3:
                 {
+                    buildUpProbabilities[0] += probabilityChange;
+                    buildUpProbabilities[1] += probabilityChange;
                     currentMap.spawnEnemy = true;
                     currentMap.currentSpawnRate = Mathf.Max(currentMap.currentSpawnRate - (currentMap.spawnRate * Time.deltaTime / timeToMin), currentMap.spawnRate * minFactor);
                     currentMap.currentMaxEnemy = Mathf.Max(currentMap.currentMaxEnemy - (currentMap.maximumEnemy * Time.deltaTime / timeToMin), currentMap.maximumEnemy * minFactor);
@@ -314,18 +322,6 @@ public class GameManager : MonoBehaviour {
         playerStressLevel = Mathf.Clamp(playerStressLevel + stressRate * Time.deltaTime, 0, 100);
     }
 
-    private bool CheckSpawnPointVisible(Vector3 spawnPos)
-    {
-        Vector3 dir = player.transform.position - spawnPos;
-        Ray ray = new Ray(spawnPos, dir);
-        if (Physics.Raycast(ray,
-            out RaycastHit hit,
-            Mathf.Infinity,
-            LayerMask.GetMask("Map", "WeaponLayer")) &&
-            hit.collider.gameObject.tag == "Player") return true;
-        else return false;
-    }
-
     private void ProcessInput()
     {
 
@@ -341,34 +337,17 @@ public class GameManager : MonoBehaviour {
 
     private void UpdateUI()
     {
-        //Objective
-        if (CurrentState == GameState.Final)
-        {
-            objectiveDebugText.text = finalObjectiveText;
-            objectiveText.text = finalObjectiveText;
-        }
-        else if (IsInMaze)
-        {
-            objectiveDebugText.text = mazeObjectiveText;
-            objectiveText.text = mazeObjectiveText;
-        }
-        else if (IsInPart2)
-        {
-            objectiveDebugText.text = gateObjectiveText;
-            objectiveText.text = gateObjectiveText;
-        }
-        else
-        {
-            objectiveDebugText.text = string.Format(keyObjectiveText, objectives, keys);
-            objectiveText.text = string.Format(keyObjectiveText, objectives, keys);
-        }
+        objectiveDebugText.text = currentObjective.ObjectiveText;
+        objectiveText.text = currentObjective.ObjectiveText;
 
         //Timer
-        float minutes = Mathf.Floor(time / 60);
-        float seconds = Mathf.Floor(time % 60);
-        int milliseconds = Mathf.RoundToInt((time - (minutes * 60) - Mathf.Floor(seconds)) * 100) % 100;
-        if (timer)
+        if (currentObjective is FinalObjective)
         {
+            FinalObjective objective = currentObjective as FinalObjective;
+            float minutes = Mathf.Floor(objective.RemainingTime / 60);
+            float seconds = Mathf.Floor(objective.RemainingTime % 60);
+            int milliseconds = Mathf.RoundToInt((objective.RemainingTime - (minutes * 60) - Mathf.Floor(seconds)) * 100) % 100;
+        
             timerDebugText.gameObject.SetActive(true);
             timerText.gameObject.SetActive(true);
             timerDebugText.text = string.Format("{0:N0}:{1,2:00}:<size=40>{2,2:00}</size>", minutes, seconds, milliseconds);
@@ -398,6 +377,7 @@ public class GameManager : MonoBehaviour {
             sb.AppendLine($"  - Max: {currentMap.MaxEnemyDistance.ToString("n1")}m");
             sb.AppendLine($"  - Min: {currentMap.MinEnemyDistance.ToString("n1")}m");
             sb.AppendLine($"Current State: {(CurrentState != GameState.Peak ? CurrentState.ToString() : $"{CurrentState}, {PeakStateTimer.ToString("n0")}s left")}, Spawnrate: {currentMap.currentSpawnRate.ToString("n3")} e/s, Max: {currentMap.currentMaxEnemy.ToString("n0")}");
+            sb.AppendLine($"Current Objective: {currentObjective.ObjectiveName}");
             sb.AppendLine();
             sb.AppendLine(!IsHordeMode ? $"Next horde in {Mathf.FloorToInt(hordeTimer)}s" : $"Horde is coming, ending in {hordeTime - Mathf.FloorToInt(Mathf.Abs(hordeTimer))}s");
             sb.AppendLine($"Stress: {playerStressLevel.ToString("n2")}%, varHP {varHP.ToString("n2")}, varAmmo {varAmmo.ToString("n2")}, varFER {varFER.ToString("n2")}, Stressrate {stressRate.ToString("n2")}");
@@ -409,7 +389,7 @@ public class GameManager : MonoBehaviour {
             sb.AppendLine($"Power-ups Available: { (powerUps.Count > 0 ? string.Join(", ", powerUps) : "(none)") }");
             sb.AppendLine($"Enemies killed: {enemyDefeated}");
             sb.AppendLine($"Current Score: {(GetBaseScore(gameEnd) + GetEnemiesDefeatedScore()).ToString("n0")}");
-
+            
             sb.AppendLine();
             if(FEREnabled)
             {
@@ -432,28 +412,28 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    internal void CompleteObjective()
+    internal void CompleteObjective(params object[] data)
     {
-        if(!IsInPart2)
+        if (currentObjective.GetObjectiveCompletion(data))
         {
-            objectives++;
-            Announce("Found a key!");
-            if (objectives == keys)
+            if(!IsInPart2)
+                IsInPart2 = currentObjective.GotoNextPartUponCompletion;
+
+            if(currentObjective is FindObjectObjective)
             {
-                IsInPart2 = true;
-                foreach (GameObject obj in dividers)
-                {
-                    Destroy(obj);
-                }
+                foreach (GameObject obj in dividers) Destroy(obj);
                 pt1Surface.enabled = false;
                 pt2Surface.enabled = true;
                 SoundManager.PlaySound(dividerSource, SoundManager.SoundType.DoorRumble);
-                Announce("A new path has just opened!");
             }
-        }
-        else
-        {
-            IsInMaze = true;
+
+            if (objectiveQueue.Count > 0)
+            {
+                currentObjective = objectiveQueue.Dequeue();
+                currentObjective.Prepare();
+                if (currentObjective is FinalObjective) StartBoss();
+            }
+            else EndGame(true);
         }
     }
 
@@ -471,17 +451,20 @@ public class GameManager : MonoBehaviour {
             GameOverManager.ShowPanel(false, GetBaseScore(), GetEnemiesDefeatedScore(), 0);
             EndGame();
         }
-
     }
 
-    internal void EndGame()
+    internal void EndGame(bool victory = false)
     {
         OnGameEnd.Invoke();
+        gameEnd = true;
+        currentMap.spawnEnemy = false;
         Cursor.lockState = CursorLockMode.None;
         player.autoGunScript.enabled = false;
         player.handgunScript.enabled = false;
         player.controller.enabled = false;
         enabled = false;
+        if (printData) printer.NextFile();
+        GameOverManager.ShowPanel(victory, GetBaseScore(victory), enemyDefeated * scorePerEnemy, 0);
     }
 
 
@@ -498,7 +481,6 @@ public class GameManager : MonoBehaviour {
         if (CurrentState != GameState.Final)
         {
             CurrentState = GameState.Final;
-            timer = true;
             currentMap.spawnEnemy = true;
             finalWall.SetActive(true);
         }
@@ -517,7 +499,6 @@ public class GameManager : MonoBehaviour {
     internal void GetSmallPotion()
     {
         SmallPotionAvailable = true;
-        
     }
 
     internal void GetGrenade()
@@ -546,46 +527,14 @@ public class GameManager : MonoBehaviour {
         while(!gameEnd)
         {
             yield return new WaitForSeconds(printInterval);
-            printer.Print(printFormat, new PrintData()
-            {
-                angerVal = anger,
-                bigPotionAvailable = BigPotionAvailable,
-                contemptVal = contempt,
-                currentState = CurrentState,
-                disgustVal = disgust,
-                distance = new Range(currentMap.AverageEnemyDistance, currentMap.MaxEnemyDistance, currentMap.MinEnemyDistance),
-                enemiesKilled = enemyDefeated,
-                enemyCount = currentMap.EnemyCount,
-                engagementVal = engagement,
-                faceDetected = ExpressionManager.FaceFound,
-                fearVal = fear,
-                FEREnabled = FEREnabled,
-                grenadeAvailable = GrenadeAvailable,
-                health = player.CurrentHealth,
-                hordeMode = hordeTimer < 1,
-                hordeTimer = Mathf.Abs(hordeTimer),
-                joyVal = joy,
-                maxEnemies = Mathf.RoundToInt(currentMap.currentMaxEnemy),
-                peakTimer = PeakStateTimer,
-                primaryAmmo = player.autoGunScript.CurrentAmmo,
-                primaryClip = player.autoGunScript.CurrentMagazine,
-                sadnessVal = sadness,
-                score = GetBaseScore() + GetEnemiesDefeatedScore(),
-                secondaryAmmo = player.handgunScript.CurrentAmmo,
-                secondaryClip = player.handgunScript.CurrentMagazine,
-                smallPotionAvailable = SmallPotionAvailable,
-                spawnRate = currentMap.currentSpawnRate,
-                stamina = player.CurrentStamina,
-                stressLevel = playerStressLevel,
-                stressRate = stressRate,
-                surpriseVal = surprise,
-                valenceVal = valence,
-                varAmmo = varAmmo,
-                varFER = varFER,
-                varHP = varHP
-            });
+            Print();
         }
 
+        Print();
+    }
+
+    void Print()
+    {
         printer.Print(printFormat, new PrintData()
         {
             angerVal = anger,
@@ -603,14 +552,14 @@ public class GameManager : MonoBehaviour {
             grenadeAvailable = GrenadeAvailable,
             health = player.CurrentHealth,
             hordeMode = hordeTimer < 1,
-            hordeTimer = Mathf.Abs( hordeTimer),
+            hordeTimer = Mathf.Abs(hordeTimer),
             joyVal = joy,
             maxEnemies = Mathf.RoundToInt(currentMap.currentMaxEnemy),
             peakTimer = PeakStateTimer,
             primaryAmmo = player.autoGunScript.CurrentAmmo,
             primaryClip = player.autoGunScript.CurrentMagazine,
             sadnessVal = sadness,
-            score = GetBaseScore(true) + GetEnemiesDefeatedScore(),
+            score = GetBaseScore() + GetEnemiesDefeatedScore(),
             secondaryAmmo = player.handgunScript.CurrentAmmo,
             secondaryClip = player.handgunScript.CurrentMagazine,
             smallPotionAvailable = SmallPotionAvailable,
