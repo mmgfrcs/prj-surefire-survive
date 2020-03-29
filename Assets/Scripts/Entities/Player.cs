@@ -116,7 +116,7 @@ public class Player : Entity {
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 3))
         {
             Chest c = hit.collider.GetComponent<Chest>();
-            if (c != null)
+            if (c != null && !c.IsBusy)
             {
                 CanShoot = false;
                 crosshair.color = new Color(1, 1, 0);
@@ -133,46 +133,51 @@ public class Player : Entity {
 
     private IEnumerator OpenChest(Chest c)
     {
-        chestsOpened.Add(c);
+        
         yield return c.OpenChest();
-        switch(c.Type)
+        if (TryOpenChest(c))
+        {
+            chestsOpened.Add(c);
+            Destroy(c);
+        }
+        else yield return c.CloseChest();
+    }
+
+    bool TryOpenChest(Chest c)
+    {
+        switch (c.Type)
         {
             case ChestType.RifleAmmo:
                 {
                     FillRifleAmmo(c);
-                    break;
+                    return true;
                 }
             case ChestType.HandgunAmmo:
                 {
                     FillHandgunAmmo(c);
-                    break;
+                    return true;
                 }
             case ChestType.AssortedAmmo:
                 {
                     FillRifleAmmo(c);
                     FillHandgunAmmo(c);
-                    break;
+                    return true;
                 }
             case ChestType.BigPotion:
                 {
-                    gameManager.GetBigPotion();
-                    gameManager.Announce($"Big Potion Added!");
-                    break;
+                    return gameManager.GetBigPotion();
                 }
             case ChestType.SmallPotion:
                 {
-                    gameManager.GetSmallPotion();
-                    gameManager.Announce($"Small Potion Added!");
-                    break;
+                    return gameManager.GetSmallPotion();
                 }
             case ChestType.Grenade:
                 {
-                    gameManager.GetGrenade();
-                    gameManager.Announce($"Grenade Added!");
-                    break;
+                    return gameManager.GetGrenade();
                 }
         }
-        Destroy(c);
+        Debug.LogError($"Chest Type Error: Type {c.Type} not found");
+        return false;
     }
 
     void FillRifleAmmo(Chest c)

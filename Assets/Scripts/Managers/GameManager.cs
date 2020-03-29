@@ -491,19 +491,37 @@ public class GameManager : MonoBehaviour {
         return enemyDefeated * scorePerEnemy + bossDefeated * scorePerBoss;
     }
 
-    internal void GetBigPotion()
+    internal bool GetBigPotion()
     {
-        BigPotionAvailable = true;
+        if (!BigPotionAvailable)
+        {
+            Announce($"Big Potion Added!");
+            BigPotionAvailable = true;
+            return true;
+        }
+        else return false;
     }
 
-    internal void GetSmallPotion()
+    internal bool GetSmallPotion()
     {
-        SmallPotionAvailable = true;
+        if (!SmallPotionAvailable)
+        {
+            Announce($"Small Potion Added!");
+            SmallPotionAvailable = true;
+            return true;
+        }
+        else return false;
     }
 
-    internal void GetGrenade()
+    internal bool GetGrenade()
     {
-        GrenadeAvailable = true;
+        if (!GrenadeAvailable)
+        {
+            Announce($"Grenade Added!");
+            GrenadeAvailable = true;
+            return true;
+        }
+        else return false;
     }
 
     internal void UseBigPotion()
