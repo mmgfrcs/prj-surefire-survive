@@ -398,7 +398,6 @@ MonoBehaviour:
   finalWall: {fileID: 666570244}
   pt1Surface: {fileID: 580376057}
   pt2Surface: {fileID: 1091058374}
-  timerDuration: 300
   hordeDelay: 100
   hordeTime: 30
   FERCurve:
@@ -450,7 +449,6 @@ MonoBehaviour:
   timeToMax: 30
   timeToMin: 15
   detector: {fileID: 797036669}
-  cameraInput: {fileID: 797036666}
   timerText: {fileID: 917716247}
   objectiveText: {fileID: 335592670}
   logObject: {fileID: 469498216651786999, guid: 6f9436a7105bdc249869a78af1b3b4de,
@@ -11978,7 +11976,7 @@ MonoBehaviour:
   swayAmount: 0.02
   maxSwayAmount: 0.06
   swaySmoothValue: 10
-  fireRate: 10.67
+  fireRate: 9
   autoReload: 1
   autoReloadDelay: 0.5
   ammo: 40

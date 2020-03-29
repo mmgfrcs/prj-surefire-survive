@@ -10,12 +10,22 @@ public class Chest : MonoBehaviour
 
     public ChestType Type { get { return type; } }
     public GameItem Item { get; private set; }
+    public bool IsBusy { get { return chestOpener.factor > 0 && chestOpener.factor < 1; } }
 
     private string[] chestDefIds = new string[] { "rifleAmmoChest", "handgunAmmoChest", "bothAmmoChest", "bigPotionChest", "smallPotionChest", "grenadeChest" };
 
     public IEnumerator OpenChest()
     {
+        chestOpener.closing = false;
         chestOpener.opening = true;
+        SoundManager.PlaySound(GetComponent<AudioSource>(), SoundManager.SoundType.ChestOpen);
+        yield return new WaitForSeconds(1f / chestOpener.speed);
+    }
+
+    public IEnumerator CloseChest()
+    {
+        chestOpener.opening = false;
+        chestOpener.closing = true;
         SoundManager.PlaySound(GetComponent<AudioSource>(), SoundManager.SoundType.ChestOpen);
         yield return new WaitForSeconds(1f / chestOpener.speed);
     }

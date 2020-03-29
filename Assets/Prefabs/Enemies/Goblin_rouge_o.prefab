@@ -1706,9 +1706,9 @@ GameObject:
   - component: {fileID: 1177372028145263746}
   - component: {fileID: 1177372028152469434}
   - component: {fileID: 1177372028145101421}
-  - component: {fileID: 1177372028145101418}
   - component: {fileID: 1177372028145101419}
   - component: {fileID: 7733854158803147056}
+  - component: {fileID: 7215108967419303632}
   m_Layer: 0
   m_Name: Goblin_rouge_o
   m_TagString: Enemy
@@ -1766,21 +1766,6 @@ CapsuleCollider:
   m_Height: 5
   m_Direction: 1
   m_Center: {x: 0, y: 2.5, z: 0}
---- !u!114 &1177372028145101418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1177372028145101416}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46ec78cf02e90b74dbfe81e20b4f9fc6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 0
-  detectDistance: 100
-  audioSource: {fileID: 7733854158803147056}
 --- !u!195 &1177372028145101419
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1900,6 +1885,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7215108967419303632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1177372028145101416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46ec78cf02e90b74dbfe81e20b4f9fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  detectDistance: 100
+  audioSource: {fileID: 7733854158803147056}
 --- !u!1 &1177372028145101634
 GameObject:
   m_ObjectHideFlags: 0
