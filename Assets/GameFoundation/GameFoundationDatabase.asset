@@ -30,10 +30,6 @@ MonoBehaviour:
   m_Categories: []
   m_Definitions:
   - {fileID: 114282915615077708}
-  - {fileID: 114393838538956260}
-  - {fileID: 114978434367636980}
-  - {fileID: 114458880724348944}
-  - {fileID: 114970356296254666}
   - {fileID: 114867906003582770}
   - {fileID: 114071317181116200}
   - {fileID: 114075317796721288}
@@ -44,6 +40,9 @@ MonoBehaviour:
   - {fileID: 114455670588050244}
   - {fileID: 114203728936761646}
   - {fileID: 114017339254579716}
+  - {fileID: 114040963432289202}
+  - {fileID: 114395369329433818}
+  - {fileID: 114552192102813880}
 --- !u!114 &114017339254579716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,7 +61,7 @@ MonoBehaviour:
   m_ReferenceDefinition: {fileID: 0}
   m_Categories: 
   m_DetailDefinitionValues: []
---- !u!114 &114025878435944904
+--- !u!114 &114031977752466436
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -72,18 +71,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
-  m_Name: poison_GameItem_Detail_Stat
+  m_Name: turret_GameItem_Detail_Stat
   m_EditorClassIdentifier: 
-  m_Owner: {fileID: 114458880724348944}
+  m_Owner: {fileID: 114552192102813880}
   m_StatDefaultIntValues_Keys: 
   m_StatDefaultIntValues_Values: 
-  m_StatDefaultFloatValues_Keys: 1323dace0460d964a37892056c54c8115d9daa9d
-  m_StatDefaultFloatValues_Values:
-  - 500
-  - 1.5
-  - 3
-  - 7
-  - 10
+  m_StatDefaultFloatValues_Keys: 
+  m_StatDefaultFloatValues_Values: []
+--- !u!114 &114040963432289202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: mobFast_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Fast Goblin
+  m_Id: mobFast
+  m_Hash: -917679585
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114249116378500878}
 --- !u!114 &114049426148880466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,7 +114,7 @@ MonoBehaviour:
   m_StatDefaultIntValues_Values: 
   m_StatDefaultFloatValues_Keys: ae7e28a9373448b9
   m_StatDefaultFloatValues_Values:
-  - 50
+  - 40
   - 20
 --- !u!114 &114071317181116200
 MonoBehaviour:
@@ -178,9 +191,9 @@ MonoBehaviour:
   m_StatDefaultFloatValues_Keys: 0460d9646c54c8111323dace5d9daa9d
   m_StatDefaultFloatValues_Values:
   - 3
-  - 40
-  - 25000
-  - 9
+  - 30
+  - 2500
+  - 8
 --- !u!114 &114123126745696232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,28 +240,6 @@ MonoBehaviour:
   - {fileID: 114123126745696232}
   m_ItemDefinitions: []
   m_DefaultCollectionDefinitions: []
---- !u!114 &114199902676478304
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
-  m_Name: stealth_GameItem_Detail_Stat
-  m_EditorClassIdentifier: 
-  m_Owner: {fileID: 114978434367636980}
-  m_StatDefaultIntValues_Keys: 
-  m_StatDefaultIntValues_Values: 
-  m_StatDefaultFloatValues_Keys: 1323dace0460d964cb1b45575d9daa9d6c54c811
-  m_StatDefaultFloatValues_Values:
-  - 500
-  - 1
-  - 30
-  - 14
-  - 7
 --- !u!114 &114203728936761646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,7 +258,7 @@ MonoBehaviour:
   m_ReferenceDefinition: {fileID: 0}
   m_Categories: 
   m_DetailDefinitionValues: []
---- !u!114 &114248697539807784
+--- !u!114 &114249116378500878
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -277,17 +268,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
-  m_Name: flight_GameItem_Detail_Stat
+  m_Name: mobFast_GameItem_Detail_Stat
   m_EditorClassIdentifier: 
-  m_Owner: {fileID: 114393838538956260}
+  m_Owner: {fileID: 114040963432289202}
   m_StatDefaultIntValues_Keys: 
   m_StatDefaultIntValues_Values: 
-  m_StatDefaultFloatValues_Keys: 1323dace6c54c8110460d9645d9daa9d
+  m_StatDefaultFloatValues_Keys: 0460d9646c54c8111323dace5d9daa9d
   m_StatDefaultFloatValues_Values:
-  - 350
-  - 7
-  - 1
-  - 16
+  - 0.75
+  - 2
+  - 60
+  - 12
 --- !u!114 &114275013998425456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,7 +410,28 @@ MonoBehaviour:
   m_Categories: 
   m_DetailDefinitionValues:
   - {fileID: 114275013998425456}
---- !u!114 &114393838538956260
+--- !u!114 &114389866369175498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: mobElite_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114395369329433818}
+  m_StatDefaultIntValues_Keys: 
+  m_StatDefaultIntValues_Values: 
+  m_StatDefaultFloatValues_Keys: 0460d9646c54c8111323dace5d9daa9d
+  m_StatDefaultFloatValues_Values:
+  - 1
+  - 5
+  - 150
+  - 8
+--- !u!114 &114395369329433818
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -429,15 +441,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
-  m_Name: flight_GameItem
+  m_Name: mobElite_GameItem
   m_EditorClassIdentifier: 
-  m_DisplayName: Eagle
-  m_Id: flight
-  m_Hash: -1034426866
+  m_DisplayName: Elite Goblin
+  m_Id: mobElite
+  m_Hash: -966738346
   m_ReferenceDefinition: {fileID: 0}
   m_Categories: 
   m_DetailDefinitionValues:
-  - {fileID: 114248697539807784}
+  - {fileID: 114389866369175498}
 --- !u!114 &114420246014581416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475,7 +487,7 @@ MonoBehaviour:
   m_ReferenceDefinition: {fileID: 0}
   m_Categories: 
   m_DetailDefinitionValues: []
---- !u!114 &114458880724348944
+--- !u!114 &114552192102813880
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -485,15 +497,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
-  m_Name: poison_GameItem
+  m_Name: turret_GameItem
   m_EditorClassIdentifier: 
-  m_DisplayName: Spider Queen
-  m_Id: poison
-  m_Hash: -109831863
+  m_DisplayName: Turret
+  m_Id: turret
+  m_Hash: -907903195
   m_ReferenceDefinition: {fileID: 0}
   m_Categories: 
   m_DetailDefinitionValues:
-  - {fileID: 114025878435944904}
+  - {fileID: 114031977752466436}
 --- !u!114 &114695344492509928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530,27 +542,6 @@ MonoBehaviour:
   m_Categories: 
   m_DetailDefinitionValues:
   - {fileID: 114872593539802366}
---- !u!114 &114774074529919168
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
-  m_Name: stun_GameItem_Detail_Stat
-  m_EditorClassIdentifier: 
-  m_Owner: {fileID: 114970356296254666}
-  m_StatDefaultIntValues_Keys: 
-  m_StatDefaultIntValues_Values: 
-  m_StatDefaultFloatValues_Keys: 1323dace0460d9646c54c8115d9daa9d
-  m_StatDefaultFloatValues_Values:
-  - 500
-  - 1.5
-  - 7
-  - 6
 --- !u!114 &114790833776749372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -585,9 +576,10 @@ MonoBehaviour:
   m_Owner: {fileID: 114075317796721288}
   m_StatDefaultIntValues_Keys: 
   m_StatDefaultIntValues_Values: 
-  m_StatDefaultFloatValues_Keys: ae7e28a9
+  m_StatDefaultFloatValues_Keys: ae7e28a9373448b9
   m_StatDefaultFloatValues_Values:
   - 80
+  - 20
 --- !u!114 &114849626516417702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -605,10 +597,10 @@ MonoBehaviour:
   m_StatDefaultIntValues_Values: 
   m_StatDefaultFloatValues_Keys: 1323dace0460d9646c54c8115d9daa9d
   m_StatDefaultFloatValues_Values:
-  - 400
-  - 1.25
-  - 1
-  - 10
+  - 100
+  - 1.2
+  - 4
+  - 9
 --- !u!114 &114867906003582770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645,41 +637,3 @@ MonoBehaviour:
   m_StatDefaultIntValues_Values: 32000000
   m_StatDefaultFloatValues_Keys: 
   m_StatDefaultFloatValues_Values: []
---- !u!114 &114970356296254666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
-  m_Name: stun_GameItem
-  m_EditorClassIdentifier: 
-  m_DisplayName: Mage
-  m_Id: stun
-  m_Hash: -210448114
-  m_ReferenceDefinition: {fileID: 0}
-  m_Categories: 
-  m_DetailDefinitionValues:
-  - {fileID: 114774074529919168}
---- !u!114 &114978434367636980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
-  m_Name: stealth_GameItem
-  m_EditorClassIdentifier: 
-  m_DisplayName: Wolf
-  m_Id: stealth
-  m_Hash: 1272993176
-  m_ReferenceDefinition: {fileID: 0}
-  m_Categories: 
-  m_DetailDefinitionValues:
-  - {fileID: 114199902676478304}

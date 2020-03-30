@@ -400,36 +400,33 @@ MonoBehaviour:
   pt2Surface: {fileID: 1091058374}
   hordeDelay: 100
   hordeTime: 30
-  FERCurve:
+  joyCurve:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.5
-      inSlope: 0
-      outSlope: 0.02
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 75
-      value: 2
-      inSlope: 0.02
-      outSlope: 0
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 100
-      value: 2
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  angerCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fearCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  surpriseCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  disgustCurve:
+    serializedVersion: 2
+    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -444,10 +441,36 @@ MonoBehaviour:
   buildUp1Probability: 0.334
   buildUp2Probability: 0.333
   probabilityChange: 0.033
-  maxFactor: 2
-  minFactor: 0.5
-  timeToMax: 30
-  timeToMin: 15
+  maxEnemyAtBU1: 100
+  maxEnemyAtBU3: 25
+  spawnRateAtBU1: 0.667
+  spawnRateAtBU3: 0.167
+  rateOfMaxEnemyChange:
+    toMax:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    toMin:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  rateOfSpawnRateChange:
+    toMax:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    toMin:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   detector: {fileID: 797036669}
   timerText: {fileID: 917716247}
   objectiveText: {fileID: 335592670}
@@ -11966,7 +11989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd38df9a0796d9842adfbe580ed6042e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletDamage: 100
+  bulletDamage: 30
   gunCamera: {fileID: 20176832841822523}
   fovSpeed: 15
   defaultFov: 40
@@ -11980,7 +12003,7 @@ MonoBehaviour:
   autoReload: 1
   autoReloadDelay: 0.5
   ammo: 40
-  magazine: 200
+  magazine: 400
   bulletForce: 400
   showBulletInMagDelay: 0.6
   bulletInMagRenderer: {fileID: 137799155588648237}
@@ -23711,7 +23734,7 @@ PrefabInstance:
     - target: {fileID: 2778387913114487464, guid: eeefe00770857414d8c299212050ae26,
         type: 3}
       propertyPath: spawnRate
-      value: 0.333
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 3048191541755855672, guid: eeefe00770857414d8c299212050ae26,
         type: 3}
@@ -28718,7 +28741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e56ac14cb72efeb4b92cf5cb025a97c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletDamage: 300
+  bulletDamage: 50
   gunCamera: {fileID: 7241292008096599519}
   fovSpeed: 15
   defaultFov: 40
@@ -28732,7 +28755,7 @@ MonoBehaviour:
   autoReload: 1
   autoReloadDelay: 0.5
   ammo: 15
-  magazine: 90
+  magazine: 150
   bulletForce: 400
   showBulletInMagDelay: 0.6
   bulletInMagRenderer: {fileID: 7340470332485049757}
