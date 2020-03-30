@@ -83,6 +83,8 @@ public class Player : Entity {
         gameManager.OnGameEnd += GameManager_OnGameEnd;
         SwitchWeapon();
         SwitchWeapon();
+
+        CanRun = false; //Permanently disable running
     }
 
     private void GameManager_OnGameEnd()
@@ -196,10 +198,9 @@ public class Player : Entity {
 
     private void ProcessInput()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            SwitchWeapon();
-        }
+        if (Input.GetKeyDown(KeyCode.Tab)) SwitchWeapon();
+        
+        /*
         if(Input.GetKey(KeyCode.LeftShift))
         {
             staminaRecharge = 0;
@@ -212,12 +213,12 @@ public class Player : Entity {
         }
         if (stamina <= 0) CanRun = false;
         else CanRun = true;
-
+        */
         if (Input.GetKeyDown(KeyCode.Alpha3) && gameManager.BigPotionAvailable)
         {
             GameItem item = new GameItem(GameFoundationSettings.database.gameItemCatalog.GetGameItemDefinition("bigHP"));
             gameManager.UseBigPotion();
-            HealHP(item.GetStatFloat(GameManager.DEF_HEAL));
+            RegenHP(item.GetStatFloat(GameManager.DEF_HEAL), item.GetStatFloat("regenAmount"));
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4) && gameManager.SmallPotionAvailable)
@@ -261,9 +262,9 @@ public class Player : Entity {
     private void UpdateUI()
     {
         hpBar.value = CurrentHealth;
-        staminaBar.value = stamina;
+        staminaBar.value = 0;
         hpBarDebug.value = CurrentHealth;
-        staminaBarDebug.value = stamina;
+        staminaBarDebug.value = 0;
         gunNameDebugText.text = autoGunScript.currentWeaponText.text;
         currentAmmoDebugText.text = autoGunScript.currentAmmoText.text;
         currentMagazineDebugText.text = autoGunScript.totalAmmoText.text;

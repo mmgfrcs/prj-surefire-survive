@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
     public NavMeshSurface pt1Surface;
     public NavMeshSurface pt2Surface;
     public float hordeDelay = 100, hordeTime = 30;
-    public AnimationCurve FERCurve;
+    public AnimationCurve joyCurve, angerCurve, fearCurve, surpriseCurve, disgustCurve;
 
     [Header("Game - Score")]
     public float scorePerEnemy = 100;
@@ -48,8 +48,8 @@ public class GameManager : MonoBehaviour {
     public float buildUp1Probability = 0.334f;
     public float buildUp2Probability = 0.333f;
     public float probabilityChange = 0.033f;
-    public float maxFactor = 2, minFactor = 0.5f;
-    public float timeToMax = 30, timeToMin = 15;
+    public float maxEnemyAtBU1 = 100, maxEnemyAtBU3 = 25f, spawnRateAtBU1 = 0.667f, spawnRateAtBU3 = 0.167f;
+    public RateOfChange rateOfMaxEnemyChange, rateOfSpawnRateChange;
     [SerializeField] Detector detector;
 
     [Header("UI")]
@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour {
     //Gameplay
     Map currentMap;
     float playerStressLevel;
-    int initRifleAmmo, initHandgunAmmo;
+    int initRifleAmmo, initHandgunAmmo, totalInitAmmo;
     float stateWeight = 0;
 
     //Objective
@@ -103,6 +103,7 @@ public class GameManager : MonoBehaviour {
 
     public event Action OnGameEnd;
 
+    internal float CurrentStateTime { get; private set; }
     internal bool IsInPart2 { get; private set; }
     internal bool IsInMaze { get; private set; }
     internal bool IsHordeMode { get { return hordeTimer < 0; } }
@@ -152,6 +153,7 @@ public class GameManager : MonoBehaviour {
         hordeTimer = hordeDelay;
         initHandgunAmmo = player.handgunScript.ammo + player.handgunScript.magazine;
         initRifleAmmo = player.autoGunScript.ammo + player.autoGunScript.magazine;
+        totalInitAmmo = initHandgunAmmo + initRifleAmmo;
         CurrentState = defaultState;
         finalWall.SetActive(false);
 
@@ -222,6 +224,7 @@ public class GameManager : MonoBehaviour {
     private void ProcessStates()
     {
         float precision = 1000;
+        CurrentStateTime += Time.deltaTime;
         switch(CurrentState)
         {
             case GameState.Relax:
@@ -230,6 +233,7 @@ public class GameManager : MonoBehaviour {
                     stateWeight = -5;
                     if(playerStressLevel <= 0)
                     {
+                        CurrentStateTime = 0;
                         float rnd = UnityEngine.Random.Range(0, precision);
                         float p1 = buildUpProbabilities[0] * precision;
                         float p2 = buildUpProbabilities[1] * precision;
@@ -242,14 +246,15 @@ public class GameManager : MonoBehaviour {
                 }
             case GameState.BuildUp1:
                 {
-                    buildUpProbabilities[0] -= probabilityChange;
-                    buildUpProbabilities[1] -= probabilityChange;
+                    //buildUpProbabilities[0] -= probabilityChange;
+                    //buildUpProbabilities[1] -= probabilityChange;
                     currentMap.spawnEnemy = true;
-                    currentMap.currentSpawnRate = Mathf.Min(currentMap.currentSpawnRate + (currentMap.spawnRate * Time.deltaTime / timeToMax), currentMap.spawnRate * maxFactor);
-                    currentMap.currentMaxEnemy = Mathf.Min(currentMap.currentMaxEnemy + (currentMap.maximumEnemy * Time.deltaTime / timeToMax), currentMap.maximumEnemy * maxFactor);
+                    currentMap.currentSpawnRate = Mathf.Min(currentMap.currentSpawnRate + rateOfSpawnRateChange.toMax.Evaluate(CurrentStateTime) * Time.deltaTime, spawnRateAtBU1);
+                    currentMap.currentMaxEnemy = Mathf.Min(currentMap.currentMaxEnemy + rateOfMaxEnemyChange.toMax.Evaluate(CurrentStateTime) * Time.deltaTime, maxEnemyAtBU1);
                     stateWeight = 3;
                     if (playerStressLevel >= 100)
                     {
+                        CurrentStateTime = 0;
                         CurrentState = GameState.Peak;
                         PeakStateTimer = 10;
                     }
@@ -257,16 +262,22 @@ public class GameManager : MonoBehaviour {
                 }
             case GameState.BuildUp2:
                 {
-                    buildUpProbabilities[0] = buildUp1Probability;
-                    buildUpProbabilities[1] = buildUp2Probability;
+                    //buildUpProbabilities[0] = buildUp1Probability;
+                    //buildUpProbabilities[1] = buildUp2Probability;
                     currentMap.spawnEnemy = true;
-                    if(currentMap.currentSpawnRate >= currentMap.spawnRate) currentMap.currentSpawnRate = Mathf.Max(currentMap.currentSpawnRate - (currentMap.spawnRate * Time.deltaTime / timeToMin), currentMap.spawnRate * minFactor);
-                    else currentMap.currentSpawnRate = Mathf.Min(currentMap.currentSpawnRate + (currentMap.spawnRate * Time.deltaTime / timeToMax), currentMap.spawnRate * maxFactor);
-                    if (currentMap.currentMaxEnemy >= currentMap.maximumEnemy) currentMap.currentMaxEnemy = Mathf.Max(currentMap.currentMaxEnemy - (currentMap.maximumEnemy * Time.deltaTime / timeToMin), currentMap.maximumEnemy * minFactor);
-                    else currentMap.currentMaxEnemy = Mathf.Min(currentMap.currentMaxEnemy + (currentMap.maximumEnemy * Time.deltaTime / timeToMax), currentMap.maximumEnemy * maxFactor);
+
+                    if(currentMap.currentSpawnRate >= currentMap.spawnRate) 
+                        currentMap.currentSpawnRate = Mathf.Max(currentMap.currentSpawnRate - rateOfSpawnRateChange.toMin.Evaluate(CurrentStateTime) * Time.deltaTime, currentMap.spawnRate);
+                    else currentMap.currentSpawnRate = Mathf.Min(currentMap.currentSpawnRate + rateOfSpawnRateChange.toMax.Evaluate(CurrentStateTime) * Time.deltaTime, currentMap.spawnRate);
+                    
+                    if (currentMap.currentMaxEnemy >= currentMap.maximumEnemy) 
+                        currentMap.currentMaxEnemy = Mathf.Max(currentMap.currentMaxEnemy - rateOfMaxEnemyChange.toMin.Evaluate(CurrentStateTime) * Time.deltaTime, currentMap.maximumEnemy);
+                    else currentMap.currentMaxEnemy = Mathf.Min(currentMap.currentMaxEnemy + rateOfSpawnRateChange.toMax.Evaluate(CurrentStateTime) * Time.deltaTime, currentMap.maximumEnemy);
+                    
                     stateWeight = 3;
                     if (playerStressLevel >= 50)
                     {
+                        CurrentStateTime = 0;
                         CurrentState = GameState.Peak;
                         PeakStateTimer = 15;
                     }
@@ -274,14 +285,15 @@ public class GameManager : MonoBehaviour {
                 }
             case GameState.BuildUp3:
                 {
-                    buildUpProbabilities[0] += probabilityChange;
-                    buildUpProbabilities[1] += probabilityChange;
+                    //buildUpProbabilities[0] += probabilityChange;
+                    //buildUpProbabilities[1] += probabilityChange;
                     currentMap.spawnEnemy = true;
-                    currentMap.currentSpawnRate = Mathf.Max(currentMap.currentSpawnRate - (currentMap.spawnRate * Time.deltaTime / timeToMin), currentMap.spawnRate * minFactor);
-                    currentMap.currentMaxEnemy = Mathf.Max(currentMap.currentMaxEnemy - (currentMap.maximumEnemy * Time.deltaTime / timeToMin), currentMap.maximumEnemy * minFactor);
+                    currentMap.currentSpawnRate = Mathf.Max(currentMap.currentSpawnRate - rateOfSpawnRateChange.toMin.Evaluate(CurrentStateTime) * Time.deltaTime, spawnRateAtBU3);
+                    currentMap.currentMaxEnemy = Mathf.Max(currentMap.currentMaxEnemy - rateOfMaxEnemyChange.toMin.Evaluate(CurrentStateTime) * Time.deltaTime, maxEnemyAtBU3);
                     stateWeight = 3;
                     if (playerStressLevel >= 25)
                     {
+                        CurrentStateTime = 0;
                         CurrentState = GameState.Peak;
                         PeakStateTimer = 7;
                     }
@@ -291,7 +303,11 @@ public class GameManager : MonoBehaviour {
                 {
                     stateWeight = 0;
                     PeakStateTimer -= Time.deltaTime;
-                    if (PeakStateTimer <= 0) CurrentState = GameState.Relax;
+                    if (PeakStateTimer <= 0)
+                    {
+                        CurrentStateTime = 0;
+                        CurrentState = GameState.Relax;
+                    }
                     break;
                 }
         }
@@ -314,9 +330,21 @@ public class GameManager : MonoBehaviour {
 
         float varHPWeight = 1;
         float varAmmoWeight = 1;
-        varHP = ((player.playerItem.GetStatFloat(DEF_HEALTH) - player.CurrentHealth) / 50 - 1) * varHPWeight;
-        varAmmo = ((initRifleAmmo + initHandgunAmmo - (player.autoGunScript.CurrentAmmo + player.autoGunScript.CurrentMagazine) - (player.handgunScript.CurrentAmmo + player.handgunScript.CurrentMagazine)) / 345f - 1) * varAmmoWeight;//player.autoGunScript
-        varFER = FEREnabled ? FERCurve.Evaluate((joy + anger) / 2) : 1;
+        float maxHp = player.playerItem.GetStatFloat(DEF_HEALTH);
+
+        varHP = ((maxHp - player.CurrentHealth) / (maxHp / 2) - 1) * varHPWeight;
+        varAmmo = ((initRifleAmmo + initHandgunAmmo - (player.autoGunScript.CurrentAmmo + player.autoGunScript.CurrentMagazine) - (player.handgunScript.CurrentAmmo + player.handgunScript.CurrentMagazine)) / (totalInitAmmo / 2) - 1) * varAmmoWeight;//player.autoGunScript
+        if (FEREnabled)
+        {
+            float varJoy = joyCurve.Evaluate(joy);
+            float varAnger = angerCurve.Evaluate(anger);
+            float varFear = fearCurve.Evaluate(fear);
+            float varSurprise = surpriseCurve.Evaluate(surprise);
+            float varDisgust = disgustCurve.Evaluate(disgust);
+            if (varHP + varAmmo >= 0) varFER = varAnger * varFear * varSurprise * varDisgust;
+            else varFER = varJoy;
+        }
+        else varFER = 1;
         stressRate = (varHP + varAmmo) * varFER + stateWeight;
         //print(stressRate);
         playerStressLevel = Mathf.Clamp(playerStressLevel + stressRate * Time.deltaTime, 0, 100);
@@ -399,6 +427,7 @@ public class GameManager : MonoBehaviour {
                     sb.AppendLine($"Joy: { joy.ToString("n2")}, Anger: { anger.ToString("n2")}, Fear: { fear.ToString("n2")}, Disgust: {disgust.ToString("n2")}, Engagement: {engagement.ToString("n2")}");
                     sb.AppendLine($"Sadness: {sadness.ToString("n2")}, Surprise: { surprise.ToString("n2")}, Valence: { valence.ToString("n2")}, Contempt: {contempt.ToString("n2")}");
                 }
+                sb.AppendLine($"varJoy: {joyCurve.Evaluate(joy).ToString("n2")}, varAnger: { angerCurve.Evaluate(anger).ToString("n2")}, varFear: { fearCurve.Evaluate(fear).ToString("n2")}, varSurprise: {surpriseCurve.Evaluate(surprise).ToString("n2")} , varDisgust: {disgustCurve.Evaluate(disgust).ToString("n2")}");
             }
             else sb.AppendLine($"FER Disabled");
 
@@ -593,4 +622,10 @@ public class GameManager : MonoBehaviour {
         });
     }
 
+}
+
+[Serializable]
+public struct RateOfChange
+{
+    public AnimationCurve toMax, toMin;
 }
