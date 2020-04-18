@@ -10,33 +10,48 @@ public class Enemy : Entity
     public float detectDistance;
     [SerializeField] internal AudioSource audioSource;
 
-    GameManager gm;
-    NavMeshAgent agent;
-    Animator anim;
-    bool attacking = false;
-    GameItem enemyItem;
+    protected GameManager gm;
+    protected NavMeshAgent agent;
+    protected Animator anim;
+    protected GameItem enemyItem;
 
     internal float distance = 0;
     internal bool firstAtk = true;
     internal bool hordeMode = false;
     internal bool gameEnd = false;
 
+    Dictionary<EnemyType, string> gameDefEntries = new Dictionary<EnemyType, string>()
+    {
+        {EnemyType.Mob, "mob" }, {EnemyType.FastMob, "mobFast"}, {EnemyType.EliteMob, "mobElite"},
+        {EnemyType.Turret, "turret"}, {EnemyType.Boss, "boss"}
+    };
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
+        GetGameFoundationStats();
+        InitializeAgentAndAnimator();
         gm = GameManager.Instance;
-        agent = GetComponent<NavMeshAgent>();
-        anim = GetComponent<Animator>();
-        GameItemDefinition def = GameFoundationSettings.database.gameItemCatalog.GetGameItemDefinition(type.ToString().ToLower());
+
+        gm.OnGameEnd += OnGameEnd;
+    }
+
+    protected virtual void GetGameFoundationStats()
+    {
+        GameItemDefinition def = GameFoundationSettings.database.gameItemCatalog.GetGameItemDefinition(gameDefEntries[type]);
         enemyItem = new GameItem(def);
         CurrentHealth = enemyItem.GetStatFloat(GameManager.DEF_HEALTH);
+    }
+
+    protected virtual void InitializeAgentAndAnimator()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        anim = GetComponent<Animator>();
 
         anim.SetFloat("Damage", enemyItem.GetStatFloat(GameManager.DEF_DAMAGE));
         anim.SetFloat("atkSpeed", enemyItem.GetStatFloat(GameManager.DEF_ATKSPEED));
         if (type == EnemyType.Mob) agent.speed = enemyItem.GetStatFloat(GameManager.DEF_MOVESPEED) * Random.Range(1f, 1.2f);
         else agent.speed = enemyItem.GetStatFloat(GameManager.DEF_MOVESPEED);
-        gm.OnGameEnd += OnGameEnd;
     }
 
     private void OnGameEnd()
@@ -62,7 +77,7 @@ public class Enemy : Entity
         GameManager.Instance.EnemyDie(this);
     }
 
-    private IEnumerator DieDecompose(float yPos)
+    protected virtual IEnumerator DieDecompose(float yPos)
     {
         yield return new WaitForSeconds(5f);
         while (transform.position.y >= yPos - 5)
@@ -91,5 +106,5 @@ public class Enemy : Entity
 
 public enum EnemyType
 {
-    Mob, Flight, Stealth, Poison, Stun, Boss
+    Mob, FastMob, EliteMob, Turret, Boss
 }

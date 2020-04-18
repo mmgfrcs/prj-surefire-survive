@@ -8,12 +8,14 @@ public class GameOverManager : MonoBehaviour
     [SerializeField, Header("General")] float animationTime = 2;
     [SerializeField] string victoryString = "Congratulations!";
     [SerializeField] string defeatString = "Game Over";
+    [SerializeField] float waitTime = 5;
     [SerializeField, Header("UI")] TextMeshProUGUI titleText;
     [SerializeField] TextMeshProUGUI score1AmountText;
     [SerializeField] TextMeshProUGUI score2AmountText;
     [SerializeField] TextMeshProUGUI score3AmountText;
     [SerializeField] TextMeshProUGUI totalScoreText;
     [SerializeField] GameObject panel;
+    [SerializeField] GameObject backButton;
 
     static GameOverManager instance;
 
@@ -33,7 +35,9 @@ public class GameOverManager : MonoBehaviour
             if (victory) instance.titleText.text = instance.victoryString;
             else instance.titleText.text = instance.defeatString;
             instance.StartCoroutine(instance.AnimateNumbers(score1, score2, score3));
+            instance.StartCoroutine(instance.BackButtonActivate());
             instance.panel.SetActive(true);
+            instance.backButton.SetActive(false);
         }
 
     }
@@ -72,5 +76,11 @@ public class GameOverManager : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    IEnumerator BackButtonActivate()
+    {
+        yield return new WaitForSeconds(waitTime);
+        backButton.SetActive(true);
     }
 }

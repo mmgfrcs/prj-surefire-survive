@@ -12,3 +12,4 @@ Title | Date of Publish
 ------------ | -------------
 [End of Research Troubles](log19032020.md) | 19/03/2020
 [Changes! A lot of it!](log29032020.md) | 29/03/2020
+[Surefire Survive v2](log19042020.md) | 19/04/2020

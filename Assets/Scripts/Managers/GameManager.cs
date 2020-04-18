@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour {
     public Transform logPanel, logPanelDebug;
     public ConsumableIcon bigPotionIcon;
     public ConsumableIcon smallPotionIcon;
+    public ConsumableIcon medkitIcon;
     public ConsumableIcon grenadeIcon;
     public Image faceStatusImage;
 
@@ -116,9 +117,10 @@ public class GameManager : MonoBehaviour {
         private set { player = value; }
     }
 
-    public bool GrenadeAvailable { get; private set; } = false;
+    public bool GrenadeAvailable { get; private set; } = true;
     public bool BigPotionAvailable { get; private set; } = false;
     public bool SmallPotionAvailable { get; private set; } = false;
+    public bool MedkitAvailable { get; private set; } = false;
 
     bool BGMState = true;
     internal bool gameEnd = false;
@@ -394,9 +396,11 @@ public class GameManager : MonoBehaviour {
         else bigPotionIcon.Disable();
         if (SmallPotionAvailable) smallPotionIcon.Enable();
         else smallPotionIcon.Disable();
+        if (MedkitAvailable) medkitIcon.Enable();
+        else medkitIcon.Disable();
 
         //Debug
-        if(debugMode)
+        if (debugMode)
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             sb.AppendLine($"Enemies: {currentMap.EnemyCount}");
@@ -493,7 +497,7 @@ public class GameManager : MonoBehaviour {
         player.controller.enabled = false;
         enabled = false;
         if (printData) printer.NextFile();
-        GameOverManager.ShowPanel(victory, GetBaseScore(victory), enemyDefeated * scorePerEnemy, 0);
+        GameOverManager.ShowPanel(victory, GetBaseScore(victory), GetEnemiesDefeatedScore(), 0);
     }
 
 
@@ -520,53 +524,55 @@ public class GameManager : MonoBehaviour {
         return enemyDefeated * scorePerEnemy + bossDefeated * scorePerBoss;
     }
 
-    internal bool GetBigPotion()
+    internal bool GetItem(ChestType item)
     {
-        if (!BigPotionAvailable)
+        if(item == ChestType.BigPotion && !BigPotionAvailable)
         {
             Announce($"Big Potion Added!");
             BigPotionAvailable = true;
             return true;
         }
-        else return false;
-    }
-
-    internal bool GetSmallPotion()
-    {
-        if (!SmallPotionAvailable)
+        else if (item == ChestType.SmallPotion && !SmallPotionAvailable)
         {
             Announce($"Small Potion Added!");
             SmallPotionAvailable = true;
             return true;
         }
-        else return false;
-    }
-
-    internal bool GetGrenade()
-    {
-        if (!GrenadeAvailable)
+        else if (item == ChestType.Grenade && !GrenadeAvailable)
         {
             Announce($"Grenade Added!");
             GrenadeAvailable = true;
             return true;
         }
+        else if (item == ChestType.Medkit && !MedkitAvailable)
+        {
+            Announce($"Medikit Added!");
+            MedkitAvailable = true;
+            return true;
+        }
         else return false;
     }
 
-    internal void UseBigPotion()
+    internal void UseItem(ChestType item)
     {
-        BigPotionAvailable = false;
-    }
-
-    internal void UseSmallPotion()
-    {
-        SmallPotionAvailable = false;
-        smallPotionIcon.EnableBar();
-    }
-
-    internal void UseGrenade()
-    {
-        GrenadeAvailable = false;
+        if (item == ChestType.BigPotion)
+        {
+            BigPotionAvailable = false;
+            bigPotionIcon.EnableBar();
+        }
+        else if (item == ChestType.SmallPotion)
+        {
+            SmallPotionAvailable = false;
+            smallPotionIcon.EnableBar();
+        }
+        else if (item == ChestType.Grenade)
+        {
+            GrenadeAvailable = false;
+        }
+        else if (item == ChestType.Medkit)
+        {
+            MedkitAvailable = false;
+        }
     }
 
     IEnumerator PrintGameDataPeriodic()
@@ -611,7 +617,6 @@ public class GameManager : MonoBehaviour {
             secondaryClip = player.handgunScript.CurrentMagazine,
             smallPotionAvailable = SmallPotionAvailable,
             spawnRate = currentMap.currentSpawnRate,
-            stamina = player.CurrentStamina,
             stressLevel = playerStressLevel,
             stressRate = stressRate,
             surpriseVal = surprise,
