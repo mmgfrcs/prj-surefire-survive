@@ -12,7 +12,7 @@ public class Chest : MonoBehaviour
     public GameItem Item { get; private set; }
     public bool IsBusy { get { return chestOpener.factor > 0 && chestOpener.factor < 1; } }
 
-    private string[] chestDefIds = new string[] { "rifleAmmoChest", "handgunAmmoChest", "bothAmmoChest", "bigPotionChest", "smallPotionChest", "grenadeChest" };
+    private string[] chestDefIds = new string[] { "rifleAmmoChest", "handgunAmmoChest", "bothAmmoChest", "bigPotionChest", "smallPotionChest", "grenadeChest", "medkitChest" };
 
     public IEnumerator OpenChest()
     {
@@ -39,5 +39,5 @@ public class Chest : MonoBehaviour
 
 public enum ChestType
 {
-    RifleAmmo, HandgunAmmo, AssortedAmmo, BigPotion, SmallPotion, Grenade
+    RifleAmmo, HandgunAmmo, AssortedAmmo, BigPotion, SmallPotion, Grenade, Medkit
 }

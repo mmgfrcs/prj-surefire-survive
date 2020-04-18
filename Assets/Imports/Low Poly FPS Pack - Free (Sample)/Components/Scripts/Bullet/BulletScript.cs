@@ -19,14 +19,14 @@ public class BulletScript : MonoBehaviour {
 
     internal float damage;
 
-	private void Start () 
+	protected virtual void Start () 
 	{
 		//Start destroy timer
 		StartCoroutine (DestroyAfter ());
 	}
 
 	//If the bullet collides with anything
-	private void OnCollisionEnter (Collision collision) 
+	protected virtual void OnCollisionEnter (Collision collision) 
 	{
 		//If bullet collides with "Metal" tag
 		if (collision.transform.tag == "Metal") 
@@ -56,9 +56,10 @@ public class BulletScript : MonoBehaviour {
         //If bullet collides with "Enemy" tag
         if (collision.transform.tag == "Enemy")
         {
-            //Toggle "explode" on explosive barrel object
-            collision.transform.gameObject.GetComponent
-                <Enemy>().Damage(damage);
+			//Toggle "explode" on explosive barrel object
+			Enemy e = collision.transform.gameObject.GetComponent<Enemy>();
+			print("Bullet: Hit enemy " + e.type);
+			e.Damage(damage);
         }
 
         //If destroy on impact is false, start 
@@ -69,7 +70,7 @@ public class BulletScript : MonoBehaviour {
         
     }
 
-	private IEnumerator DestroyTimer () 
+	protected IEnumerator DestroyTimer () 
 	{
 		//Wait random time based on min and max values
 		yield return new WaitForSeconds
@@ -78,7 +79,7 @@ public class BulletScript : MonoBehaviour {
 		Destroy(gameObject);
 	}
 
-	private IEnumerator DestroyAfter () 
+	protected IEnumerator DestroyAfter () 
 	{
 		//Wait for set amount of time
 		yield return new WaitForSeconds (destroyAfter);

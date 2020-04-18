@@ -84,7 +84,7 @@ public class GrenadeScript : MonoBehaviour {
 
 			//Add force to nearby rigidbodies
 			if (rb != null)
-				rb.AddExplosionForce (power * 5, explosionPos, radius, 3.0F);
+				rb.AddExplosionForce (power, explosionPos, radius, 15.0F);
 			
 			//If the explosion hits "Target" tag and isHit is false
 			if (hit.GetComponent<Collider>().tag == "Target" 
@@ -106,7 +106,7 @@ public class GrenadeScript : MonoBehaviour {
             if (hit.GetComponent<Collider>().tag == "Enemy")
             {
                 //Toggle "explode" on explosive barrel object
-                hit.gameObject.GetComponent<Enemy>().Damage(2500);
+                hit.gameObject.GetComponent<Enemy>().Damage(100);
             }
         }
 
