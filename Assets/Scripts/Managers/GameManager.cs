@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
     public NavMeshSurface pt1Surface;
     public NavMeshSurface pt2Surface;
     public float hordeDelay = 100, hordeTime = 30;
-    public AnimationCurve joyCurve, angerCurve, fearCurve, surpriseCurve, disgustCurve;
+    public CarePackageSettings carePackageSettings;
 
     [Header("Game - Score")]
     public float scorePerEnemy = 100;
@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour {
     public float probabilityChange = 0.033f;
     public float maxEnemyAtBU1 = 100, maxEnemyAtBU3 = 25f, spawnRateAtBU1 = 0.667f, spawnRateAtBU3 = 0.167f;
     public float timeToMax = 30, timeToMin = 15;
+    public AnimationCurve joyCurve, angerCurve, fearCurve, surpriseCurve, disgustCurve;
     public RateOfChange rateOfMaxEnemyChange, rateOfSpawnRateChange;
     [SerializeField] Detector detector;
 
@@ -128,6 +129,7 @@ public class GameManager : MonoBehaviour {
     internal bool gameEnd = false;
     DataPrinter printer;
     float[] buildUpProbabilities = new float[2];
+    public float GameTime { get; private set; }
 
     private void Awake()
     {
@@ -194,10 +196,21 @@ public class GameManager : MonoBehaviour {
 
     private void Update()
     {
+        GameTime += Time.deltaTime;
         ProcessInput();
         ProcessStates();
         CalculateStressLevel();
         UpdateUI();
+
+        if(carePackageSettings.CurrentDelivery != null && carePackageSettings.CurrentDelivery.time <= GameTime)
+        {
+            //Deliver Package
+            Vector3 spawnLoc = carePackageSettings.CurrentDelivery.deliveryLocation.position;
+            spawnLoc.y += 100;
+            Instantiate(carePackageSettings.packagePrefab, spawnLoc, carePackageSettings.CurrentDelivery.deliveryLocation.rotation);
+            carePackageSettings.GetNextDelivery();
+            Announce("A Care Package has been dropped!");
+        }
 
         if (currentObjective is FinalObjective && !gameEnd)
         {
