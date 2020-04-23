@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Networking;
-using UnityEngine.GameFoundation;
-using TMPro;
+﻿using Affdex;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 using UnityEngine.AI;
-using Affdex;
+using UnityEngine.GameFoundation;
+using UnityEngine.UI;
 
 public enum GameState
 {
@@ -16,58 +14,47 @@ public enum GameState
 }
 
 public class GameManager : MonoBehaviour {
-    [Header("Debug")]
-    public bool debugMode = true;
-    public bool printData = true;
-    public float printInterval = 1f;
+    [Header("Debug"), SerializeField] public bool debugMode = true;
+    [SerializeField] public bool printData = true;
+    [SerializeField] public float printInterval = 1f;
     [SerializeField] PrintType printFormat = PrintType.CSV;
-    public TextMeshProUGUI debugText;
-    public TextMeshProUGUI objectiveDebugText, timerDebugText;
+    [SerializeField] TextMeshProUGUI debugText;
+    [SerializeField] TextMeshProUGUI objectiveDebugText, timerDebugText;
 
-    [Header("Game - General")]
-    public ObjectiveBase[] objectives;
-    public AudioSource dividerSource;
-    public GameObject[] dividers;
-    public GameObject finalWall;
-    public NavMeshSurface pt1Surface;
-    public NavMeshSurface pt2Surface;
-    public float hordeDelay = 100, hordeTime = 30;
-    public CarePackageSettings carePackageSettings;
-
-    [Header("Game - Score")]
-    public float scorePerEnemy = 100;
-    public float scorePerBoss = 5000;
-    public float baseScorePt1 = 2000;
-    public float baseScorePt2 = 5000;
-    public float baseScoreFinal = 10000;
-    public float baseScoreVictory = 20000;
+    [Header("Game - General"), SerializeField] Player player; 
+    [SerializeField] ObjectiveBase[] objectives;
+    [SerializeField] AudioSource dividerSource;
+    [SerializeField] GameObject[] dividers;
+    [SerializeField] GameObject finalWall;
+    [SerializeField] NavMeshSurface pt1Surface;
+    [SerializeField] NavMeshSurface pt2Surface;
+    [SerializeField] float hordeDelay = 100, hordeTime = 30;
+    [SerializeField] CarePackageSettings carePackageSettings;
+    [SerializeField] GameScore scoreConfiguration;
 
     [Header("Game - Meta AI"), SerializeField]
     internal bool FEREnabled = true;
-    public GameState defaultState = GameState.Relax;
-    public float buildUp1Probability = 0.334f;
-    public float buildUp2Probability = 0.333f;
-    public float probabilityChange = 0.033f;
-    public float maxEnemyAtBU1 = 100, maxEnemyAtBU3 = 25f, spawnRateAtBU1 = 0.667f, spawnRateAtBU3 = 0.167f;
-    public float timeToMax = 30, timeToMin = 15;
-    public AnimationCurve joyCurve, angerCurve, fearCurve, surpriseCurve, disgustCurve;
-    public RateOfChange rateOfMaxEnemyChange, rateOfSpawnRateChange;
+    [SerializeField] GameState defaultState = GameState.Relax;
+    [SerializeField] float buildUp1Probability = 0.334f;
+    [SerializeField] float buildUp2Probability = 0.333f;
+    [SerializeField] float probabilityChange = 0.033f;
+    [SerializeField] float maxEnemyAtBU1 = 100, maxEnemyAtBU3 = 25f, spawnRateAtBU1 = 0.667f, spawnRateAtBU3 = 0.167f;
+    [SerializeField] float timeToMax = 30, timeToMin = 15;
+    [SerializeField] AnimationCurve joyCurve, angerCurve, fearCurve, surpriseCurve, disgustCurve;
+    [SerializeField] RateOfChange rateOfMaxEnemyChange, rateOfSpawnRateChange;
     [SerializeField] Detector detector;
 
-    [Header("UI")]
-    public TextMeshProUGUI timerText;
-    public TextMeshProUGUI objectiveText;
-    public GameObject logObject;
-    public Transform logPanel, logPanelDebug;
-    public ConsumableIcon bigPotionIcon;
-    public ConsumableIcon smallPotionIcon;
-    public ConsumableIcon medkitIcon;
-    public ConsumableIcon grenadeIcon;
-    public Image faceStatusImage;
+    [Header("UI"), SerializeField] TextMeshProUGUI timerText;
+    [SerializeField] TextMeshProUGUI objectiveText;
+    [SerializeField] GameObject logObject;
+    [SerializeField] Transform logPanel, logPanelDebug;
+    [SerializeField] ConsumableIcon bigPotionIcon;
+    [SerializeField] ConsumableIcon smallPotionIcon;
+    [SerializeField] ConsumableIcon medkitIcon;
+    [SerializeField] ConsumableIcon grenadeIcon;
+    [SerializeField] Image faceStatusImage;
 
     public static GameManager Instance;
-
-    [SerializeField]  Player player;
 
     float hordeTimer;
 
@@ -374,14 +361,6 @@ public class GameManager : MonoBehaviour {
 
     }
 
-    private float GetBaseScore(bool victory = false)
-    {
-        if (victory) return baseScoreVictory;
-        else if (CurrentState == GameState.Final) return baseScoreFinal;
-        else if (IsInPart2) return baseScorePt2;
-        else return baseScorePt1;
-    }
-
     private void UpdateUI()
     {
         objectiveDebugText.text = currentObjective.ObjectiveText;
@@ -437,7 +416,7 @@ public class GameManager : MonoBehaviour {
             if (GrenadeAvailable) powerUps.Add("Grenade");
             sb.AppendLine($"Power-ups Available: { (powerUps.Count > 0 ? string.Join(", ", powerUps) : "(none)") }");
             sb.AppendLine($"Enemies killed: {enemyDefeated}");
-            sb.AppendLine($"Current Score: {(GetBaseScore(gameEnd) + GetEnemiesDefeatedScore()).ToString("n0")}");
+            sb.AppendLine($"Current Score: {scoreConfiguration.GetTotalScore().ToString("n0")}");
             
             sb.AppendLine();
             if(FEREnabled)
@@ -469,6 +448,8 @@ public class GameManager : MonoBehaviour {
             if(!IsInPart2)
                 IsInPart2 = currentObjective.GotoNextPartUponCompletion;
 
+            scoreConfiguration.AddEntry("Objectives", currentObjective.ObjectiveName, currentObjective.ScoreReward);
+
             if(currentObjective is FindObjectObjective)
             {
                 foreach (GameObject obj in dividers) Destroy(obj);
@@ -491,6 +472,7 @@ public class GameManager : MonoBehaviour {
     {
         if (e.type == EnemyType.Boss) bossDefeated++;
         else if (e.type == EnemyType.Mob) enemyDefeated++;
+        scoreConfiguration.AddEnemyKillEntry(e.type);
         currentMap.EnemyDie(e);
     }
 
@@ -498,7 +480,6 @@ public class GameManager : MonoBehaviour {
     {
         if(enabled)
         {
-            GameOverManager.ShowPanel(false, GetBaseScore(), GetEnemiesDefeatedScore(), 0);
             EndGame();
         }
     }
@@ -514,9 +495,16 @@ public class GameManager : MonoBehaviour {
         player.controller.enabled = false;
         enabled = false;
         if (printData) printer.NextFile();
-        GameOverManager.ShowPanel(victory, GetBaseScore(victory), GetEnemiesDefeatedScore(), 0);
+        scoreConfiguration.FinalizeScore(victory, player.RifleTotalAmmo, player.HandgunTotalAmmo, BigPotionAvailable, SmallPotionAvailable, MedkitAvailable, GrenadeAvailable);
+        GameOverManager.ShowPanel(victory, 
+            scoreConfiguration.GetAllScores(), 
+            scoreConfiguration.GetPerCategoryScore, 
+            GetScoresInCategory
+        );
     }
 
+    internal List<(string name, float value)> GetScoresInCategory(string category)
+        => scoreConfiguration.GetScoresInCategory(category);
 
     internal void Announce(string text)
     {
@@ -534,11 +522,6 @@ public class GameManager : MonoBehaviour {
             currentMap.spawnEnemy = true;
             finalWall.SetActive(true);
         }
-    }
-
-    internal float GetEnemiesDefeatedScore()
-    {
-        return enemyDefeated * scorePerEnemy + bossDefeated * scorePerBoss;
     }
 
     internal bool GetItem(ChestType item)
@@ -592,6 +575,26 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void SetItemBarValue(ChestType item, float value)
+    {
+        if (item == ChestType.BigPotion) bigPotionIcon.SetBarValue(value);
+        else if (item == ChestType.SmallPotion) smallPotionIcon.SetBarValue(value);
+    }
+
+    public void SetItemBarVisibility(ChestType item, bool visible)
+    {
+        if (item == ChestType.BigPotion)
+        {
+            if (visible) bigPotionIcon.EnableBar(); 
+            else bigPotionIcon.DisableBar();
+        }
+        else if (item == ChestType.SmallPotion)
+        {
+            if (visible) smallPotionIcon.EnableBar();
+            else smallPotionIcon.DisableBar();
+        }
+    }
+
     IEnumerator PrintGameDataPeriodic()
     {
         while(!gameEnd)
@@ -629,7 +632,7 @@ public class GameManager : MonoBehaviour {
             primaryAmmo = player.autoGunScript.CurrentAmmo,
             primaryClip = player.autoGunScript.CurrentMagazine,
             sadnessVal = sadness,
-            score = GetBaseScore() + GetEnemiesDefeatedScore(),
+            score = scoreConfiguration.GetTotalScore(),
             secondaryAmmo = player.handgunScript.CurrentAmmo,
             secondaryClip = player.handgunScript.CurrentMagazine,
             smallPotionAvailable = SmallPotionAvailable,

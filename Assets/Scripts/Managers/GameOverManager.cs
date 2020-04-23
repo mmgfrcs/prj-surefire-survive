@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 using TMPro;
+using UnityEngine;
 
 public class GameOverManager : MonoBehaviour
 {
@@ -10,12 +12,12 @@ public class GameOverManager : MonoBehaviour
     [SerializeField] string defeatString = "Game Over";
     [SerializeField] float waitTime = 5;
     [SerializeField, Header("UI")] TextMeshProUGUI titleText;
-    [SerializeField] TextMeshProUGUI score1AmountText;
-    [SerializeField] TextMeshProUGUI score2AmountText;
-    [SerializeField] TextMeshProUGUI score3AmountText;
+    [SerializeField] GameOverPanelText[] scoreAmountTexts;
     [SerializeField] TextMeshProUGUI totalScoreText;
     [SerializeField] GameObject panel;
     [SerializeField] GameObject backButton;
+
+    List<(string category, string name, float score)> scoreData;
 
     static GameOverManager instance;
 
@@ -28,13 +30,14 @@ public class GameOverManager : MonoBehaviour
         panel.SetActive(false);
     }
 
-    public static void ShowPanel(bool victory, float score1, float score2, float score3)
+    public static void ShowPanel(bool victory, List<(string category, string name, float score)> scores, Func<List<(string, string, float)>, List<(string, float)>> categoryOverviewFunc, Func<string, List<(string, float)>> perCategoryFunc)
     {
         if(!instance.panel.activeInHierarchy)
         {
             if (victory) instance.titleText.text = instance.victoryString;
             else instance.titleText.text = instance.defeatString;
-            instance.StartCoroutine(instance.AnimateNumbers(score1, score2, score3));
+            instance.scoreData = scores;
+            instance.StartCoroutine(instance.AnimateNumbers(categoryOverviewFunc(scores)));
             instance.StartCoroutine(instance.BackButtonActivate());
             instance.panel.SetActive(true);
             instance.backButton.SetActive(false);
@@ -50,30 +53,41 @@ public class GameOverManager : MonoBehaviour
         
     }
 
-    IEnumerator AnimateNumbers(float score1, float score2, float score3)
+    IEnumerator AnimateNumbers(List<(string category, float score)> scores)
     {
-        float s1 = 0, s2 = 0, s3 = 0;
-        score1AmountText.text = "0";
-        score2AmountText.text = "0";
-        score3AmountText.text = "0";
+
+        float[] scoreArr = new float[scores.Count];
+        for (int i = 0; i < Mathf.Min(scoreAmountTexts.Length, scores.Count); i++)
+        {
+            scoreAmountTexts[i].nameText.transform.parent.gameObject.SetActive(true);
+            scoreAmountTexts[i].nameText.text = scores[i].category;
+            scoreAmountTexts[i].valueText.text = "0";
+        }
+        for (int i = (scoreAmountTexts.Length > scores.Count ? scores.Count : scoreAmountTexts.Length); i < (scoreAmountTexts.Length > scores.Count ? scoreAmountTexts.Length : scores.Count); i++)
+        {
+            scoreAmountTexts[i].nameText.transform.parent.gameObject.SetActive(false);
+        }
+
         yield return new WaitForSeconds(0.5f);
         while (true)
         {
-            s1 += score1 * Time.deltaTime / animationTime;
-            s2 += score2 * Time.deltaTime / animationTime;
-            s3 += score3 * Time.deltaTime / animationTime;
-            score1AmountText.text = s1.ToString("n0");
-            score2AmountText.text = s2.ToString("n0");
-            score3AmountText.text = s3.ToString("n0");
-            totalScoreText.text = (s1 + s2 + s3).ToString("n0");
-            if(s1 >= score1)
+            for (int i = 0; i < Mathf.Min(scoreAmountTexts.Length, scores.Count); i++)
             {
-                score1AmountText.text = score1.ToString("n0");
-                score2AmountText.text = score2.ToString("n0");
-                score3AmountText.text = score3.ToString("n0");
-                totalScoreText.text = (score1 + score2 + score3).ToString("n0");
+                scoreArr[i] += scores[i].score * Time.deltaTime / animationTime;
+                scoreAmountTexts[i].valueText.text = scoreArr[i].ToString("n0");
+            }
+
+            totalScoreText.text = scoreArr.Sum().ToString("n0");
+            
+            if(scoreArr[0] > scores[0].score)
+            {
+                for (int i = 0; i < Mathf.Min(scoreAmountTexts.Length, scores.Count); i++)
+                    scoreAmountTexts[i].valueText.text = scores[i].score.ToString("n0");
+
+                totalScoreText.text = scores.Sum(x=> x.score).ToString("n0");
                 break;
             }
+
             yield return null;
         }
     }
@@ -83,4 +97,10 @@ public class GameOverManager : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         backButton.SetActive(true);
     }
+}
+
+[Serializable]
+public struct GameOverPanelText
+{
+    public TextMeshProUGUI nameText, valueText;
 }

@@ -1,12 +1,10 @@
-﻿using System.Collections;
+﻿using FPSControllerLPFP;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
-using UnityEngine.UI;
-using FPSControllerLPFP;
-using UnityEngine.GameFoundation;
 using TMPro;
-using System;
+using UnityEngine;
+using UnityEngine.GameFoundation;
+using UnityEngine.UI;
 
 public class Player : Entity {
 
@@ -41,7 +39,8 @@ public class Player : Entity {
     public bool CanRun { get; private set; }
     public bool CanShoot { get; private set; } = true;
     public bool IsRifleEquipped { get { return autoGunArms.activeInHierarchy; } }
-
+    public int RifleTotalAmmo { get { return autoGunScript.CurrentAmmo + autoGunScript.CurrentMagazine; } }
+    public int HandgunTotalAmmo { get { return handgunScript.CurrentAmmo + handgunScript.CurrentMagazine; } }
     List<Chest> chestsOpened = new List<Chest>();
     
     GameManager gameManager;
@@ -83,6 +82,8 @@ public class Player : Entity {
     private void GameManager_OnGameEnd()
     {
         end = true;
+        if (smallPotRegenCoroutine != null) StopCoroutine(smallPotRegenCoroutine);
+        if (bigPotRegenCoroutine != null) StopCoroutine(bigPotRegenCoroutine);
     }
 
     protected override void Die()
@@ -318,7 +319,7 @@ public class Player : Entity {
         {
             while (BigPotHealDuration > 0)
             {
-                gameManager.bigPotionIcon.SetBarValue(BigPotHealDuration / BigPotHealMaxDuration);
+                gameManager.SetItemBarValue(ChestType.BigPotion, BigPotHealDuration / BigPotHealMaxDuration);
                 float tickHeal = BigPotHealAmount * Time.deltaTime / BigPotHealDuration;
                 HealHP(tickHeal);
                 BigPotHealAmount -= tickHeal;
@@ -329,14 +330,14 @@ public class Player : Entity {
             BigPotHealAmount = 0;
             BigPotHealDuration = 0;
             BigPotHealMaxDuration = 0;
-            gameManager.bigPotionIcon.DisableBar();
+            gameManager.SetItemBarVisibility(ChestType.BigPotion, false);
             bigPotRegenCoroutine = null;
         }
         else
         {
             while (SmallPotHealDuration > 0)
             {
-                gameManager.smallPotionIcon.SetBarValue(SmallPotHealDuration / SmallPotHealMaxDuration);
+                gameManager.SetItemBarValue(ChestType.SmallPotion, SmallPotHealDuration / SmallPotHealMaxDuration);
                 float tickHeal = SmallPotHealAmount * Time.deltaTime / SmallPotHealDuration;
                 HealHP(tickHeal);
                 SmallPotHealAmount -= tickHeal;
@@ -347,7 +348,7 @@ public class Player : Entity {
             SmallPotHealAmount = 0;
             SmallPotHealDuration = 0;
             SmallPotHealMaxDuration = 0;
-            gameManager.smallPotionIcon.DisableBar();
+            gameManager.SetItemBarVisibility(ChestType.SmallPotion, false);
             smallPotRegenCoroutine = null;
         }
 
