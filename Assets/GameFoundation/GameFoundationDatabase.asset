@@ -45,6 +45,7 @@ MonoBehaviour:
   - {fileID: 114552192102813880}
   - {fileID: 114489651459584750}
   - {fileID: 114867079673388872}
+  - {fileID: 114461957781637596}
 --- !u!114 &114017339254579716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -511,6 +512,43 @@ MonoBehaviour:
   m_ReferenceDefinition: {fileID: 0}
   m_Categories: 
   m_DetailDefinitionValues: []
+--- !u!114 &114461957781637596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbf3f8defcf78f428d1448085483eff, type: 3}
+  m_Name: carePackage_GameItem
+  m_EditorClassIdentifier: 
+  m_DisplayName: Care Package
+  m_Id: carePackage
+  m_Hash: 1450437216
+  m_ReferenceDefinition: {fileID: 0}
+  m_Categories: 
+  m_DetailDefinitionValues:
+  - {fileID: 114482921146653020}
+--- !u!114 &114482921146653020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0045a420c8b2b474eb4c14cf512c1cb5, type: 3}
+  m_Name: carePackage_GameItem_Detail_Stat
+  m_EditorClassIdentifier: 
+  m_Owner: {fileID: 114461957781637596}
+  m_StatDefaultIntValues_Keys: dfba60918bf9a227
+  m_StatDefaultIntValues_Values: 6400000032000000
+  m_StatDefaultFloatValues_Keys: ae7e28a9
+  m_StatDefaultFloatValues_Values:
+  - 100
 --- !u!114 &114489651459584750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -563,7 +601,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Owner: {fileID: 114102969101550282}
   m_StatDefaultIntValues_Keys: dfba60918bf9a227
-  m_StatDefaultIntValues_Values: 7800000041000000
+  m_StatDefaultIntValues_Values: 6400000032000000
   m_StatDefaultFloatValues_Keys: 
   m_StatDefaultFloatValues_Values: []
 --- !u!114 &114765220918101272

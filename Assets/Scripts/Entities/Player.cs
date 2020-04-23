@@ -165,6 +165,14 @@ public class Player : Entity {
                 {
                     return gameManager.GetItem(c.Type);
                 }
+            case ChestType.CarePackage:
+                {
+                    gameManager.Announce("Care Package Taken!");
+                    HealHP(c.Item.GetStatFloat(GameManager.DEF_HEAL));
+                    FillRifleAmmo(c);
+                    FillHandgunAmmo(c);
+                    return true;
+                }
         }
         Debug.LogError($"Chest Type Error: Type {c.Type} not found");
         return false;
@@ -173,14 +181,16 @@ public class Player : Entity {
     void FillRifleAmmo(Chest c)
     {
         int ammo = c.Item.GetStatInt(GameManager.DEF_AK47AMMO);
-        gameManager.Announce($"+{ammo} AK47 Ammo");
+        if (c.Type != ChestType.CarePackage)
+            gameManager.Announce($"+{ammo} AK47 Ammo");
         autoGunScript.AddMagazine(ammo);
     }
 
     void FillHandgunAmmo(Chest c)
     {
         int ammo = c.Item.GetStatInt(GameManager.DEF_HANDGUNAMMO);
-        gameManager.Announce($"+{ammo} Glock Ammo");
+        if (c.Type != ChestType.CarePackage)
+            gameManager.Announce($"+{ammo} Glock Ammo");
         handgunScript.AddMagazine(ammo);
     }
 
