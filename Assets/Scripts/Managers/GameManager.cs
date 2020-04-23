@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour {
     public float buildUp2Probability = 0.333f;
     public float probabilityChange = 0.033f;
     public float maxEnemyAtBU1 = 100, maxEnemyAtBU3 = 25f, spawnRateAtBU1 = 0.667f, spawnRateAtBU3 = 0.167f;
+    public float timeToMax = 30, timeToMin = 15;
     public RateOfChange rateOfMaxEnemyChange, rateOfSpawnRateChange;
     [SerializeField] Detector detector;
 
@@ -74,6 +75,7 @@ public class GameManager : MonoBehaviour {
     float playerStressLevel;
     int initRifleAmmo, initHandgunAmmo, totalInitAmmo;
     float stateWeight = 0;
+    float startingMaxEnemy = 0, startingSpawnRate = 0;
 
     //Objective
     Queue<ObjectiveBase> objectiveQueue = new Queue<ObjectiveBase>();
@@ -118,9 +120,9 @@ public class GameManager : MonoBehaviour {
     }
 
     public bool GrenadeAvailable { get; private set; } = true;
-    public bool BigPotionAvailable { get; private set; } = false;
-    public bool SmallPotionAvailable { get; private set; } = false;
-    public bool MedkitAvailable { get; private set; } = false;
+    public bool BigPotionAvailable { get; private set; } = true;
+    public bool SmallPotionAvailable { get; private set; } = true;
+    public bool MedkitAvailable { get; private set; } = true;
 
     bool BGMState = true;
     internal bool gameEnd = false;
@@ -236,6 +238,8 @@ public class GameManager : MonoBehaviour {
                     if(playerStressLevel <= 0)
                     {
                         CurrentStateTime = 0;
+                        startingSpawnRate = currentMap.currentSpawnRate;
+                        startingMaxEnemy = currentMap.currentMaxEnemy;
                         float rnd = UnityEngine.Random.Range(0, precision);
                         float p1 = buildUpProbabilities[0] * precision;
                         float p2 = buildUpProbabilities[1] * precision;
@@ -251,8 +255,8 @@ public class GameManager : MonoBehaviour {
                     //buildUpProbabilities[0] -= probabilityChange;
                     //buildUpProbabilities[1] -= probabilityChange;
                     currentMap.spawnEnemy = true;
-                    currentMap.currentSpawnRate = Mathf.Min(currentMap.currentSpawnRate + rateOfSpawnRateChange.toMax.Evaluate(CurrentStateTime) * Time.deltaTime, spawnRateAtBU1);
-                    currentMap.currentMaxEnemy = Mathf.Min(currentMap.currentMaxEnemy + rateOfMaxEnemyChange.toMax.Evaluate(CurrentStateTime) * Time.deltaTime, maxEnemyAtBU1);
+                    currentMap.currentSpawnRate = Mathf.Min(currentMap.currentSpawnRate + (spawnRateAtBU1 - startingSpawnRate) / timeToMax * rateOfSpawnRateChange.toMax.Evaluate(CurrentStateTime) * Time.deltaTime, spawnRateAtBU1);
+                    currentMap.currentMaxEnemy = Mathf.Min(currentMap.currentMaxEnemy + (maxEnemyAtBU1 - startingMaxEnemy) / timeToMax * rateOfMaxEnemyChange.toMax.Evaluate(CurrentStateTime) * Time.deltaTime, maxEnemyAtBU1);
                     stateWeight = 3;
                     if (playerStressLevel >= 100)
                     {
@@ -269,12 +273,12 @@ public class GameManager : MonoBehaviour {
                     currentMap.spawnEnemy = true;
 
                     if(currentMap.currentSpawnRate >= currentMap.spawnRate) 
-                        currentMap.currentSpawnRate = Mathf.Max(currentMap.currentSpawnRate - rateOfSpawnRateChange.toMin.Evaluate(CurrentStateTime) * Time.deltaTime, currentMap.spawnRate);
-                    else currentMap.currentSpawnRate = Mathf.Min(currentMap.currentSpawnRate + rateOfSpawnRateChange.toMax.Evaluate(CurrentStateTime) * Time.deltaTime, currentMap.spawnRate);
+                        currentMap.currentSpawnRate = Mathf.Max(currentMap.currentSpawnRate - (startingSpawnRate - spawnRateAtBU3) / timeToMin * rateOfSpawnRateChange.toMin.Evaluate(CurrentStateTime) * Time.deltaTime, currentMap.spawnRate);
+                    else currentMap.currentSpawnRate = Mathf.Min(currentMap.currentSpawnRate + (spawnRateAtBU1 - startingSpawnRate) / timeToMax * rateOfSpawnRateChange.toMax.Evaluate(CurrentStateTime) * Time.deltaTime, currentMap.spawnRate);
                     
                     if (currentMap.currentMaxEnemy >= currentMap.maximumEnemy) 
-                        currentMap.currentMaxEnemy = Mathf.Max(currentMap.currentMaxEnemy - rateOfMaxEnemyChange.toMin.Evaluate(CurrentStateTime) * Time.deltaTime, currentMap.maximumEnemy);
-                    else currentMap.currentMaxEnemy = Mathf.Min(currentMap.currentMaxEnemy + rateOfSpawnRateChange.toMax.Evaluate(CurrentStateTime) * Time.deltaTime, currentMap.maximumEnemy);
+                        currentMap.currentMaxEnemy = Mathf.Max(currentMap.currentMaxEnemy - (startingMaxEnemy - maxEnemyAtBU3) / timeToMin * rateOfMaxEnemyChange.toMin.Evaluate(CurrentStateTime) * Time.deltaTime, currentMap.maximumEnemy);
+                    else currentMap.currentMaxEnemy = Mathf.Min(currentMap.currentMaxEnemy + (maxEnemyAtBU1 - startingMaxEnemy) / timeToMax * rateOfSpawnRateChange.toMax.Evaluate(CurrentStateTime) * Time.deltaTime, currentMap.maximumEnemy);
                     
                     stateWeight = 3;
                     if (playerStressLevel >= 50)
@@ -290,8 +294,8 @@ public class GameManager : MonoBehaviour {
                     //buildUpProbabilities[0] += probabilityChange;
                     //buildUpProbabilities[1] += probabilityChange;
                     currentMap.spawnEnemy = true;
-                    currentMap.currentSpawnRate = Mathf.Max(currentMap.currentSpawnRate - rateOfSpawnRateChange.toMin.Evaluate(CurrentStateTime) * Time.deltaTime, spawnRateAtBU3);
-                    currentMap.currentMaxEnemy = Mathf.Max(currentMap.currentMaxEnemy - rateOfMaxEnemyChange.toMin.Evaluate(CurrentStateTime) * Time.deltaTime, maxEnemyAtBU3);
+                    currentMap.currentSpawnRate = Mathf.Max(currentMap.currentSpawnRate - (startingSpawnRate - spawnRateAtBU3) / timeToMin * rateOfSpawnRateChange.toMin.Evaluate(CurrentStateTime) * Time.deltaTime, spawnRateAtBU3);
+                    currentMap.currentMaxEnemy = Mathf.Max(currentMap.currentMaxEnemy - (startingMaxEnemy - maxEnemyAtBU3) / timeToMin * rateOfMaxEnemyChange.toMin.Evaluate(CurrentStateTime) * Time.deltaTime, maxEnemyAtBU3);
                     stateWeight = 3;
                     if (playerStressLevel >= 25)
                     {
