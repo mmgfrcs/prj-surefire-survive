@@ -22,7 +22,7 @@ public class AttackAIBehavior : StateMachineBehaviour
         
         if(!damage && stateInfo.normalizedTime * animator.GetInteger("totalFrame") > animator.GetInteger("damageFrame"))
         {
-            if (Vector3.Distance(animator.transform.position, GameManager.Instance.PlayerObject.transform.position) <= disengageDist)
+            if (Vector3.Distance(animator.transform.position, GameManager.Instance.PlayerObject.transform.position) <= disengageDist * 1.25f)
             {
                 if(self.type == EnemyType.Mob)
                 {
