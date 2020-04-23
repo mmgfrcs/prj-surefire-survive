@@ -382,7 +382,7 @@ namespace FPSControllerLPFP
             /// Returns true while the virtual button mapped to run is held down.          
             public bool Run
             {
-                get { return Input.GetButton(run); }
+                get { return false; }
             }
 				     
             /// Returns true during the frame the user pressed down the virtual button mapped to jump.          

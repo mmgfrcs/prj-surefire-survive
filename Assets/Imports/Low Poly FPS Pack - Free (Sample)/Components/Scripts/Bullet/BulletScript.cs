@@ -58,7 +58,12 @@ public class BulletScript : MonoBehaviour {
         {
 			//Toggle "explode" on explosive barrel object
 			Enemy e = collision.transform.gameObject.GetComponent<Enemy>();
-			print("Bullet: Hit enemy " + e.type);
+			if(e.type == EnemyType.Turret)
+			{
+				Instantiate(metalImpactPrefabs[Random.Range
+				(0, metalImpactPrefabs.Length)], transform.position,
+				Quaternion.LookRotation(collision.contacts[0].normal));
+			}
 			e.Damage(damage);
         }
 

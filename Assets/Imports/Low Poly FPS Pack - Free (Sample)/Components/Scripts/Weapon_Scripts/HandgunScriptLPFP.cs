@@ -220,7 +220,7 @@ public class HandgunScriptLPFP : MonoBehaviour, IGun {
 
 		//Aiming
 		//Toggle camera FOV when right click is held down
-		if(Input.GetButton("Fire2") && !isReloading && !isRunning && !isInspecting) 
+		if(Input.GetButton("Aim") && !isReloading && !isRunning && !isInspecting) 
 		{
 			
 			gunCamera.fieldOfView = Mathf.Lerp (gunCamera.fieldOfView,
@@ -258,13 +258,17 @@ public class HandgunScriptLPFP : MonoBehaviour, IGun {
 		//Set current ammo text from ammo int
 		currentAmmoText.text = currentAmmo.ToString();
         totalAmmoText.text = currentMags.ToString();
+		if (currentAmmo == 0) currentAmmoText.color = new Color(0.7f, 0.7f, 0.7f, 0.2f);
+		else currentAmmoText.color = Color.white;
+		if (currentMags == 0) totalAmmoText.color = new Color(0.7f, 0.7f, 0.7f, 0.2f);
+		else totalAmmoText.color = Color.white;
 
-        //Continosuly check which animation 
-        //is currently playing
-        AnimationCheck ();
+		//Continosuly check which animation 
+		//is currently playing
+		AnimationCheck ();
 			
 		//Throw grenade when pressing G key
-		if (Input.GetKeyDown (KeyCode.G) && !isInspecting && gm.GrenadeAvailable) 
+		if (Input.GetButtonDown("Grenade") && !isInspecting && gm.GrenadeAvailable) 
 		{
 			StartCoroutine (GrenadeSpawnDelay ());
 			//Play grenade throw animation
@@ -274,7 +278,7 @@ public class HandgunScriptLPFP : MonoBehaviour, IGun {
 
 
 		//Shooting 
-		if (Input.GetMouseButtonDown (0) && !outOfAmmo && !isReloading && !isInspecting && !isRunning && gm.PlayerObject.CanShoot) 
+		if (Input.GetButtonDown("Fire") && !outOfAmmo && !isReloading && !isInspecting && !isRunning && gm.PlayerObject.CanShoot) 
 		{
 			anim.Play ("Fire", 0, 0f);
 	
@@ -403,7 +407,7 @@ public class HandgunScriptLPFP : MonoBehaviour, IGun {
 		}
 
 		//Reload 
-		if (Input.GetKeyDown (KeyCode.R) && !isReloading && !isInspecting && !outOfMags) 
+		if (Input.GetButtonDown("Reload") && !isReloading && !isInspecting && !outOfMags) 
 		{
             //Reload
             Reload();
@@ -416,10 +420,8 @@ public class HandgunScriptLPFP : MonoBehaviour, IGun {
 		}
 
 		//Walking when pressing down WASD keys
-		if (Input.GetKey (KeyCode.W) && !isRunning || 
-			Input.GetKey (KeyCode.A) && !isRunning || 
-			Input.GetKey (KeyCode.S) && !isRunning || 
-			Input.GetKey (KeyCode.D) && !isRunning) 
+		if (Input.GetAxisRaw("Horizontal") > 0 && !isRunning ||
+			Input.GetAxisRaw("Vertical") > 0 && !isRunning)
 		{
 			anim.SetBool ("Walk", true);
 		} else {
@@ -427,12 +429,12 @@ public class HandgunScriptLPFP : MonoBehaviour, IGun {
 		}
 
 		//Running when pressing down W and Left Shift key
-		if ((Input.GetKey (KeyCode.W) && Input.GetKey (KeyCode.LeftShift)) && gm.PlayerObject.CanRun) 
-		{
-			isRunning = true;
-		} else {
-			isRunning = false;
-		}
+		//if ((Input.GetKey (KeyCode.W) && Input.GetKey (KeyCode.LeftShift)) && gm.PlayerObject.CanRun) 
+		//{
+		//	isRunning = true;
+		//} else {
+		//	isRunning = false;
+		//}
 		
 		//Run anim toggle
 		if (isRunning == true) {

@@ -26,7 +26,7 @@ public class ConsumableIcon : MonoBehaviour
 
     public void Disable()
     {
-        icon.color = new Color(0.8f, 0.8f, 0.8f, 0.4f);
+        icon.color = new Color(0.6f, 0.6f, 0.6f, 0.1f);
         hotkeyText.SetActive(false);
     }
 

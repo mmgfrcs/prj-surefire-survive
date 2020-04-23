@@ -116,7 +116,7 @@ public class Player : Entity {
                 CanShoot = false;
                 crosshair.color = new Color(1, 1, 0);
                 chestText.SetActive(true);
-                if (Input.GetKeyDown(KeyCode.E))
+                if (Input.GetButtonDown("Interact"))
                 {
                     if(!chestsOpened.Contains(c)) StartCoroutine(OpenChest(c));
                 }
@@ -186,7 +186,7 @@ public class Player : Entity {
 
     private void ProcessInput()
     {
-        if (Input.GetKeyDown(KeyCode.Tab) || Input.mouseScrollDelta.y != 0) SwitchWeapon();
+        if (Input.GetButtonDown("Switch Weapon") || Input.mouseScrollDelta.y != 0) SwitchWeapon();
         
         /* Running disabled
         if(Input.GetKey(KeyCode.LeftShift))
@@ -203,33 +203,33 @@ public class Player : Entity {
         else CanRun = true;
         */
         
-        if (Input.GetKeyDown(KeyCode.Alpha1) && gameManager.BigPotionAvailable)
+        if (Input.GetButtonDown("Item1") || Input.GetAxisRaw("Item1 Axis") < -0.1f && gameManager.BigPotionAvailable)
         {
             GameItem item = new GameItem(GameFoundationSettings.database.gameItemCatalog.GetGameItemDefinition("bigHP"));
             gameManager.UseItem(ChestType.BigPotion);
             RegenHP(item.GetStatFloat(GameManager.DEF_HEAL), item.GetStatFloat("regenAmount"), true);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2) && gameManager.SmallPotionAvailable)
+        if (Input.GetButtonDown("Item2") || Input.GetAxisRaw("Item2 Axis") > 0.1f && gameManager.SmallPotionAvailable)
         {
             GameItem item = new GameItem(GameFoundationSettings.database.gameItemCatalog.GetGameItemDefinition("smallHP"));
             gameManager.UseItem(ChestType.SmallPotion);
             RegenHP(item.GetStatFloat(GameManager.DEF_HEAL), item.GetStatFloat("regenAmount"));
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3) && gameManager.MedkitAvailable)
+        if (Input.GetButtonDown("Item3") || Input.GetAxisRaw("Item3 Axis") > 0.1f && gameManager.MedkitAvailable)
         {
             GameItem item = new GameItem(GameFoundationSettings.database.gameItemCatalog.GetGameItemDefinition("medkit"));
             gameManager.UseItem(ChestType.Medkit);
             HealHP(item.GetStatFloat(GameManager.DEF_HEAL));
         }
 
-        if (Input.GetKeyDown(KeyCode.G) && gameManager.GrenadeAvailable)
+        if (Input.GetButtonDown("Grenade") && gameManager.GrenadeAvailable)
         {
             gameManager.UseItem(ChestType.Grenade);
         }
 
-        if (Input.GetMouseButton(1)) crosshair.gameObject.SetActive(false);
+        if (Input.GetButton("Aim")) crosshair.gameObject.SetActive(false);
         else crosshair.gameObject.SetActive(true);
     }
 
