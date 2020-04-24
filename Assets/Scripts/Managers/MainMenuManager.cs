@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainMenuManager : MonoBehaviour
 {
+    [SerializeField] bool FEREnabled = true;
     [SerializeField] CanvasGroup mainUI;
     [SerializeField] CanvasGroup howToPlayUI, creditsUI;
     [SerializeField] Image fader;
+    [SerializeField] TextMeshProUGUI versionText;
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(InitialFade());
+        versionText.text = $"Version {Application.version}-{(FEREnabled ? "F" : "NF")}";
     }
 
     // Update is called once per frame

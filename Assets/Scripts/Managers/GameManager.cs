@@ -32,9 +32,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] CarePackageSettings carePackageSettings;
     [SerializeField] GameScore scoreConfiguration;
 
-    [Header("Game - Meta AI"), SerializeField]
-    internal bool FEREnabled = true;
-    [SerializeField] GameState defaultState = GameState.Relax;
+    [Header("Game - Meta AI"), SerializeField] GameState defaultState = GameState.Relax;
     [SerializeField] float buildUp1Probability = 0.334f;
     [SerializeField] float buildUp2Probability = 0.333f;
     [SerializeField] float probabilityChange = 0.033f;
@@ -55,6 +53,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] Image faceStatusImage;
 
     public static GameManager Instance;
+    public static bool FEREnabled;
 
     float hordeTimer;
 
