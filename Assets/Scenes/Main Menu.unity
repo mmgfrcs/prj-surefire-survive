@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.13559267, g: 0.14969161, b: 0.16211069, a: 1}
+  m_IndirectSpecularColor: {r: 0.016155045, g: 0.01912193, b: 0.02206352, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -271,8 +271,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &99437095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,8 +289,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -388,8 +384,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!222 &212067676
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -487,8 +481,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!222 &247712012
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -586,8 +578,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!222 &288790055
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -676,8 +666,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
-        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   delegates: []
 --- !u!1 &378616729
 GameObject:
@@ -861,10 +849,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62af677b2583cc64fba5548c67ab7a4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FEREnabled: 1
   mainUI: {fileID: 449005586}
   howToPlayUI: {fileID: 1272547403}
   creditsUI: {fileID: 350546480}
   fader: {fileID: 1134010357}
+  versionText: {fileID: 1047567830}
 --- !u!4 &483324673
 Transform:
   m_ObjectHideFlags: 0
@@ -1043,8 +1033,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 'Vincentius Dennis
 
     <size=40>Game Designer</size>
@@ -1055,14 +1043,14 @@ MonoBehaviour:
     <size=40>Programmer</size>
 
 
-    Joseph danielson Ramli
+    Joseph Danielson Ramli
 
     <size=40>Level Designer</size>
 
 
-    ???
+    Rius Putra
 
-    <size=40>???</size>'
+    <size=40>Level Designer</size>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42063980c1fa69c4a85184686d3a5322, type: 2}
   m_sharedMaterial: {fileID: 21219747813610284, guid: 42063980c1fa69c4a85184686d3a5322,
@@ -1132,10 +1120,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 511215850}
-    characterCount: 107
+    characterCount: 125
     spriteCount: 0
-    spaceCount: 16
-    wordCount: 12
+    spaceCount: 18
+    wordCount: 16
     linkCount: 0
     lineCount: 11
     pageCount: 1
@@ -1252,8 +1240,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!222 &573120068
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1408,8 +1394,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Start
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42063980c1fa69c4a85184686d3a5322, type: 2}
@@ -1566,8 +1550,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: a6b6171a5c620a64c9017d0836e1d8b5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
@@ -1640,8 +1622,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 'Big Potion: +80 Health instantly
 
     Small Potion: +50 Health Over 20s
@@ -1817,8 +1797,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Version Alpha 2-NF
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42063980c1fa69c4a85184686d3a5322, type: 2}
@@ -1975,8 +1953,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: '<size=48>Controls</size>
 
 
@@ -2159,8 +2135,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
@@ -2233,8 +2207,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 'Affdex SDK
 
     Affectiva
@@ -2437,8 +2409,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: How To Play
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42063980c1fa69c4a85184686d3a5322, type: 2}
@@ -7469,8 +7439,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Play Game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42063980c1fa69c4a85184686d3a5322, type: 2}
@@ -7627,8 +7595,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Credits
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42063980c1fa69c4a85184686d3a5322, type: 2}
@@ -7785,8 +7751,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Options
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42063980c1fa69c4a85184686d3a5322, type: 2}
@@ -7943,8 +7907,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Exit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42063980c1fa69c4a85184686d3a5322, type: 2}
@@ -8180,8 +8142,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Credits
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42063980c1fa69c4a85184686d3a5322, type: 2}
