@@ -12,10 +12,13 @@
 /[Aa]ssets/Imports/Affdex/*
 /[Aa]ssets/StreamingAssets/*
 /[Aa]ssets/DataFile~/*
+/[Aa]ssets/[Pp]lugins/[Gg]itHub/*
 
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
+/[Aa]ssets/[Pp]lugins/[Gg]itHub.meta
+/[Aa]ssets/[Pp]lugins/[Gg]itHub/*.meta
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*
@@ -63,3 +66,5 @@ sysinfo.txt
 crashlytics-build.properties
 
 [Aa]ssets/.dataNo.txt
+
+*.zip
