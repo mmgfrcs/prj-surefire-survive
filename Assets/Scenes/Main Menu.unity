@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.016155045, g: 0.01912193, b: 0.02206352, a: 1}
+  m_IndirectSpecularColor: {r: 0.016213758, g: 0.01921983, b: 0.022160603, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1622,11 +1622,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Big Potion: +80 Health instantly
+  m_text: 'Big Potion: +80 HP Over 20s
 
-    Small Potion: +50 Health Over 20s
+    Small Potion: +40 HP Over 20s
 
     Grenade: Area Damage
+
+    Medkit: +100 HP
 
 
     Tips:
@@ -1635,13 +1637,11 @@ MonoBehaviour:
 
     Listen to the sound cues
 
-    Don''t dodge
-
-    Use sprint effectively
-
     Items don''t stack
 
-    Buildings are <size=48>WALLS</size>'
+    Buildings are <size=48>WALLS</size>
+
+    <size=30><i>(THIS IS IMPORTANT!)</i></size>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42063980c1fa69c4a85184686d3a5322, type: 2}
   m_sharedMaterial: {fileID: 21219747813610284, guid: 42063980c1fa69c4a85184686d3a5322,
@@ -1711,10 +1711,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1045686077}
-    characterCount: 204
+    characterCount: 197
     spriteCount: 0
-    spaceCount: 33
-    wordCount: 33
+    spaceCount: 35
+    wordCount: 35
     linkCount: 0
     lineCount: 11
     pageCount: 1
@@ -1933,7 +1933,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 90.00006, y: -144}
-  m_SizeDelta: {x: 720, y: 800}
+  m_SizeDelta: {x: 800, y: 800}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1112912468
 MonoBehaviour:
@@ -1958,28 +1958,24 @@ MonoBehaviour:
 
     W, A, S, D - Move
 
-    Tab - Change Weapon
+    Mousewheel, Tab - Change Weapon
 
     R - Reload
 
-    F - Open Chest
+    E - Open Chest
 
-    Shift (Hold) - Sprint
+    1 - Use Big Potion
 
-    Space - Jump
+    2 - use Small Potion
 
-    3 - Use Big Potion
-
-    4 - use Small Potion
+    3 - Use Medkit
 
     G - Throw Grenade
 
 
     Left Mouse Button - Shoot
 
-    Right Mouse Button - Aim
-
-'
+    Right Mouse Button - Aim'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 42063980c1fa69c4a85184686d3a5322, type: 2}
   m_sharedMaterial: {fileID: 21219747813610284, guid: 42063980c1fa69c4a85184686d3a5322,
@@ -2025,7 +2021,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 194
+  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -2049,12 +2045,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1112912468}
-    characterCount: 219
+    characterCount: 210
     spriteCount: 0
-    spaceCount: 51
-    wordCount: 49
+    spaceCount: 48
+    wordCount: 47
     linkCount: 0
-    lineCount: 14
+    lineCount: 13
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0

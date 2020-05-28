@@ -442,6 +442,7 @@ public class GameManager : MonoBehaviour {
 
     internal void CompleteObjective(params object[] data)
     {
+        print("[DEBUG] Objective Completion: " + string.Join(", ", data));
         if (currentObjective.GetObjectiveCompletion(data))
         {
             if(!IsInPart2)
