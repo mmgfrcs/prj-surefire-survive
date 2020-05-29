@@ -35,7 +35,7 @@ jobs:
         unzip -o Affdex.zip
 
     - name: Build with Unity
-      uses: webbertakken/unity-builder@1.0
+      uses: webbertakken/unity-builder@v1.0
       env:
         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
       with:
