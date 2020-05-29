@@ -5,29 +5,58 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+public enum Menus
+{
+    MainMenu, HowToPlay, Credits, Options
+}
+
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] bool FEREnabled = true;
-    [SerializeField] CanvasGroup mainUI;
-    [SerializeField] CanvasGroup howToPlayUI, creditsUI;
+    [SerializeField] CanvasGroup mainUI, howToPlayUI, creditsUI, optionsUI;
     [SerializeField] Image fader;
     [SerializeField] TextMeshProUGUI versionText;
     // Start is called before the first frame update
+
+    Menus currentMenu = Menus.MainMenu;
     void Start()
     {
+        //Setup Scene
+        //Activate Screens
+        mainUI.gameObject.SetActive(true);
+        howToPlayUI.gameObject.SetActive(true);
+        creditsUI.gameObject.SetActive(true);
+        optionsUI.gameObject.SetActive(true);
+
+        //Setup alpha
+        mainUI.alpha = 1;
+        howToPlayUI.alpha = 0;
+        creditsUI.alpha = 0;
+        optionsUI.alpha = 0;
+
         StartCoroutine(InitialFade());
-        versionText.text = $"Version {Application.version}-{(FEREnabled ? "F" : "NF")}";
+        versionText.text = $"Version {Application.version}";
     }
 
     // Update is called once per frame
     public void OnPlay()
     {
-        StartCoroutine(FadeToMenu(false));
+        StartCoroutine(FadeToMenu(Menus.HowToPlay));
+    }
+
+    public void OnOptions()
+    {
+        StartCoroutine(FadeToMenu(Menus.Options));
     }
 
     public void OnCredits()
     {
-        StartCoroutine(FadeToMenu(true));
+        StartCoroutine(FadeToMenu(Menus.Credits));
+    }
+
+    public void OnMenuExit()
+    {
+        StartCoroutine(FadeToMenu(Menus.MainMenu));
     }
 
     public void OnActualStart()
@@ -35,12 +64,7 @@ public class MainMenuManager : MonoBehaviour
         StartCoroutine(FadeOut());
     }
 
-    public void OnCreditsExit()
-    {
-        StartCoroutine(FadeToMainUI(true));
-    }
-
-    public void OnExit()
+    public void OnGameExit()
     {
         Application.Quit();
     }
@@ -66,55 +90,29 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene("Game");
     }
 
-    IEnumerator FadeToMenu(bool creditsMenu)
+    IEnumerator FadeToMenu(Menus to)
     {
-        if(creditsMenu)
-        {
-            mainUI.blocksRaycasts = false;
-            while (mainUI.alpha > 0)
-            {
-                mainUI.alpha -= Time.deltaTime;
-                creditsUI.alpha += Time.deltaTime;
-                yield return null;
-            }
-            creditsUI.blocksRaycasts = true;
-        }
-        else
-        {
-            mainUI.blocksRaycasts = false;
-            while(mainUI.alpha > 0)
-            {
-                mainUI.alpha -= Time.deltaTime;
-                howToPlayUI.alpha += Time.deltaTime;
-                yield return null;
-            }
-            howToPlayUI.blocksRaycasts = true;
-        }
-    }
+        CanvasGroup source, dest;
 
-    IEnumerator FadeToMainUI(bool creditsMenu)
-    {
-        if (creditsMenu)
+        //Figure out source and destination Menu
+        if (currentMenu == Menus.HowToPlay) source = howToPlayUI;
+        else if (currentMenu == Menus.Credits) source = creditsUI;
+        else if (currentMenu == Menus.Options) source = optionsUI;
+        else source = mainUI;
+        if (to == Menus.HowToPlay) dest = howToPlayUI;
+        else if (to == Menus.Credits) dest = creditsUI;
+        else if (to == Menus.Options) dest = optionsUI;
+        else dest = mainUI;
+
+        //Start fading menu
+        source.blocksRaycasts = false;
+        while (source.alpha > 0)
         {
-            creditsUI.blocksRaycasts = false;
-            while (creditsUI.alpha > 0)
-            {
-                mainUI.alpha += Time.deltaTime;
-                creditsUI.alpha -= Time.deltaTime;
-                yield return null;
-            }
-            mainUI.blocksRaycasts = true;
+            source.alpha -= Time.deltaTime;
+            dest.alpha += Time.deltaTime;
+            yield return null;
         }
-        else
-        {
-            howToPlayUI.blocksRaycasts = false;
-            while (howToPlayUI.alpha > 0)
-            {
-                mainUI.alpha += Time.deltaTime;
-                howToPlayUI.alpha -= Time.deltaTime;
-                yield return null;
-            }
-            mainUI.blocksRaycasts = true;
-        }
+        dest.blocksRaycasts = true;
+        currentMenu = to;
     }
 }
