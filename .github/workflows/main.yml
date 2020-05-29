@@ -41,6 +41,7 @@ jobs:
       with:
         unityVersion: 2018.4.17f1
         targetPlatform: StandaloneWindows64
+        allowDirtyBuild: true
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2
       with:
