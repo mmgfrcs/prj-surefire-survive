@@ -1125,12 +1125,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FEREnabled: 1
+  mixer: {fileID: 24100000, guid: 8460b0335ec21b34fbdb232a202e4ddf, type: 2}
   mainUI: {fileID: 449005586}
   howToPlayUI: {fileID: 1272547403}
   creditsUI: {fileID: 350546480}
   optionsUI: {fileID: 573951477}
   fader: {fileID: 1134010357}
   versionText: {fileID: 1047567830}
+  BGMVolumeSlider: {fileID: 653421376}
+  SFXVolumeSlider: {fileID: 756859895}
+  FERToggle: {fileID: 1915411153}
 --- !u!4 &483324673
 Transform:
   m_ObjectHideFlags: 0
@@ -1934,7 +1938,18 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 483324672}
+        m_MethodName: OnBGMVolumeChange
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &718972977
 GameObject:
   m_ObjectHideFlags: 0
@@ -2176,7 +2191,18 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 483324672}
+        m_MethodName: OnSFXVolumeChange
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &834411262
 GameObject:
   m_ObjectHideFlags: 0
@@ -8580,6 +8606,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 483324672}
+        m_MethodName: SaveOptions
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1369354014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10290,7 +10327,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 483324672}
+        m_MethodName: OnToggleFER
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &1954634254
 GameObject:
