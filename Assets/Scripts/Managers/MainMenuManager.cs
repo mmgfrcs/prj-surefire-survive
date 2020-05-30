@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Audio;
 
 public enum Menus
 {
@@ -13,10 +14,14 @@ public enum Menus
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] bool FEREnabled = true;
+    [SerializeField] AudioMixer mixer;
     [SerializeField] CanvasGroup mainUI, howToPlayUI, creditsUI, optionsUI;
     [SerializeField] Image fader;
     [SerializeField] TextMeshProUGUI versionText;
-    // Start is called before the first frame update
+
+    //Controls for setting default values
+    [SerializeField] Slider BGMVolumeSlider, SFXVolumeSlider;
+    [SerializeField] Toggle FERToggle;
 
     Menus currentMenu = Menus.MainMenu;
     void Start()
@@ -33,6 +38,16 @@ public class MainMenuManager : MonoBehaviour
         howToPlayUI.alpha = 0;
         creditsUI.alpha = 0;
         optionsUI.alpha = 0;
+
+        //Get values for Options
+        BGMVolumeSlider.value = PlayerPrefs.GetFloat("BGM", DbToLinear(-3));
+        SFXVolumeSlider.value = PlayerPrefs.GetFloat("SFX", DbToLinear(0));
+        FERToggle.isOn = PlayerPrefs.GetInt("FER", FEREnabled ? 1 : 0) == 1;
+
+        //Apply values
+        mixer.SetFloat("bgmVol", LinearToDb(BGMVolumeSlider.value));
+        mixer.SetFloat("sfxVol", LinearToDb(SFXVolumeSlider.value));
+        FEREnabled = FERToggle.isOn;
 
         StartCoroutine(InitialFade());
         versionText.text = $"Version {Application.version}";
@@ -52,6 +67,14 @@ public class MainMenuManager : MonoBehaviour
     public void OnCredits()
     {
         StartCoroutine(FadeToMenu(Menus.Credits));
+    }
+
+    public void SaveOptions()
+    {
+        PlayerPrefs.SetFloat("BGM", BGMVolumeSlider.value);
+        PlayerPrefs.SetFloat("SFX", SFXVolumeSlider.value);
+        PlayerPrefs.SetInt("FER", FERToggle.isOn ? 1 : 0);
+        PlayerPrefs.Save();
     }
 
     public void OnMenuExit()
@@ -114,5 +137,33 @@ public class MainMenuManager : MonoBehaviour
         }
         dest.blocksRaycasts = true;
         currentMenu = to;
+    }
+
+    public void OnBGMVolumeChange(float value)
+    {
+        mixer.SetFloat("bgmVol", LinearToDb(value));
+    }
+
+    public void OnSFXVolumeChange(float value)
+    {
+        mixer.SetFloat("sfxVol", LinearToDb(value));
+    }
+
+    public void OnToggleFER(bool active)
+    {
+        FEREnabled = active;
+    }
+
+    float LinearToDb(float val)
+    {
+        if (val != 0)
+            return 20.0f * Mathf.Log10(val);
+        else
+            return -144.0f;
+    }
+
+    float DbToLinear(float val)
+    {
+        return Mathf.Pow(10.0f, val / 20.0f);
     }
 }

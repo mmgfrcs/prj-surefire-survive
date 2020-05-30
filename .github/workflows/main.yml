@@ -35,12 +35,13 @@ jobs:
         unzip -o Affdex.zip
 
     - name: Build with Unity
-      uses: webbertakken/unity-builder@1.0
+      uses: webbertakken/unity-builder@v1.0
       env:
         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
       with:
         unityVersion: 2018.4.17f1
         targetPlatform: StandaloneWindows64
+        allowDirtyBuild: true
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2
       with:
