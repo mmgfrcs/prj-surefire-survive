@@ -12,13 +12,15 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+    name: Build Win64
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     if: "!contains(toJSON(github.event.commits.*.message), '[Skip CI]')"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
       with:
         lfs: true
     - name: Get/Restore cache
@@ -26,14 +28,14 @@ jobs:
       with:
         path: Library
         key: Library-Win64
-    - name: Install unzip
-      run: sudo apt-get install unzip -y
+        # An ordered list of keys to use for restoring the cache if no cache hit occurred for key
+        restore-keys: |
+          Library-
     - name: Download Affdex.zip and extract
       run: |
         chmod +x ./CI/AffdexDownload.sh
         ./CI/AffdexDownload.sh
         unzip -o Affdex.zip
-
     - name: Build with Unity
       uses: webbertakken/unity-builder@v1.0
       env:
@@ -42,10 +44,24 @@ jobs:
         unityVersion: 2018.4.17f1
         targetPlatform: StandaloneWindows64
         allowDirtyBuild: true
+        buildName: Surefire Survive
+    - name: Get Version Info
+      id: get-ver
+      run: |
+        chmod +x ./CI/Version.sh
+        ./CI/Version.sh
+        echo "##[set-output name=version;]$(cat version.txt)"
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2
       with:
         # Artifact name
-        name: Build # optional
+        name: Build-${{steps.get-ver.outputs.version}} # optional
         # A file, directory or wildcard pattern that describes what to upload
         path: build
+    - name: Upload Version File
+      uses: actions/upload-artifact@v2
+      with:
+        # Artifact name
+        name: Version # optional
+        # A file, directory or wildcard pattern that describes what to upload
+        path: version.txt
