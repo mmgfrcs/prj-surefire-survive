@@ -13,6 +13,7 @@ public enum Menus
 
 public class MainMenuManager : MonoBehaviour
 {
+    [SerializeField] ExperimentManager experimentManager;
     [SerializeField] bool FEREnabled = true;
     [SerializeField] AudioMixer mixer;
     [SerializeField] CanvasGroup mainUI, howToPlayUI, creditsUI, optionsUI;
@@ -48,6 +49,15 @@ public class MainMenuManager : MonoBehaviour
         mixer.SetFloat("bgmVol", LinearToDb(BGMVolumeSlider.value));
         mixer.SetFloat("sfxVol", LinearToDb(SFXVolumeSlider.value));
         FEREnabled = FERToggle.isOn;
+
+        //Get values from config if override is true
+        if (experimentManager.OverrideClient)
+        {
+            FERToggle.interactable = !experimentManager.LockFER;
+            FEREnabled = experimentManager.IsFEREnabled;
+            FERToggle.isOn = FEREnabled;
+        }
+
 
         StartCoroutine(InitialFade());
         versionText.text = $"Version {Application.version}";
