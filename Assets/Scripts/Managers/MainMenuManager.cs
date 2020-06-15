@@ -58,7 +58,6 @@ public class MainMenuManager : MonoBehaviour
             FERToggle.isOn = FEREnabled;
         }
 
-
         StartCoroutine(InitialFade());
         versionText.text = $"Version {Application.version}";
     }
