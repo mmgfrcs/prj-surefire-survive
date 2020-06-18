@@ -17,6 +17,7 @@ public class ExperimentManager : MonoBehaviour
     [SerializeField] bool lockGame = true;
     [SerializeField] bool lockFER = true, overrideClient = true;
 
+    public static ExperimentManager Instance;
     public int Attempts { get => attempts; }
     public bool IsFEREnabled { get => FEREnabled; }
     public float FinalStageTime { get => finalStageTime; }
@@ -25,8 +26,17 @@ public class ExperimentManager : MonoBehaviour
     public bool LockFER { get => lockFER; }
     public bool OverrideClient { get => overrideClient; }
 
+    public int CurrentAttempts { get; private set; }
+    public bool IsPlayable { get { return !lockGame || CurrentAttempts < attempts; } }
+
     private void Start()
     {
+        DontDestroyOnLoad(gameObject);
+        if (Instance == null) Instance = this;
+        else Destroy(this);
+
+        CurrentAttempts = PlayerPrefs.GetInt("attempts", 0);
+
         if (ConfigurationManager.Instance.IsConfigReady) SetValuesFromConfig();
     }
 
@@ -45,6 +55,12 @@ public class ExperimentManager : MonoBehaviour
         lockFER = ConfigurationManager.Instance.CurrentConfig.GetBool("lockFER", true);
         overrideClient = ConfigurationManager.Instance.CurrentConfig.GetBool("override", true);
         enabled = false;
+    }
+
+    public void AddAttempt()
+    {
+        PlayerPrefs.SetInt("attempts", ++CurrentAttempts);
+        PlayerPrefs.Save();
     }
 
     public void OnContinue(TMP_InputField input)

@@ -142,6 +142,13 @@ public class GameManager : MonoBehaviour {
             printer = new DataPrinter();
             StartCoroutine(PrintGameDataPeriodic());
         }
+
+        hordeDelay /= ExperimentManager.Instance.DifficultyFactor;
+        maxEnemyAtBU1 *= ExperimentManager.Instance.DifficultyFactor;
+        maxEnemyAtBU3 *= ExperimentManager.Instance.DifficultyFactor;
+        spawnRateAtBU1 *= ExperimentManager.Instance.DifficultyFactor;
+        spawnRateAtBU3 *= ExperimentManager.Instance.DifficultyFactor;
+        
         hordeTimer = hordeDelay;
         initHandgunAmmo = player.handgunScript.ammo + player.handgunScript.magazine;
         initRifleAmmo = player.autoGunScript.ammo + player.autoGunScript.magazine;
@@ -162,22 +169,6 @@ public class GameManager : MonoBehaviour {
             objectiveQueue.Enqueue(objective);
         currentObjective = objectiveQueue.Dequeue();
 
-        MakePoints();
-    }
-
-    private void MakePoints()
-    {
-        const int n = 5;
-        const float r = 5;
-
-        float angle = 360f / n;
-
-        for (int i = 0; i < n; i++)
-        {
-            Vector3 start = player.transform.forward * r;
-            start = Quaternion.AngleAxis(angle * i, player.transform.up) * start;
-            new GameObject("Point" + i).transform.position = player.transform.position + start;
-        }
     }
 
     private void Update()

@@ -13,12 +13,11 @@ public enum Menus
 
 public class MainMenuManager : MonoBehaviour
 {
-    [SerializeField] ExperimentManager experimentManager;
     [SerializeField] bool FEREnabled = true;
     [SerializeField] AudioMixer mixer;
     [SerializeField] CanvasGroup mainUI, howToPlayUI, creditsUI, optionsUI;
     [SerializeField] Image fader;
-    [SerializeField] TextMeshProUGUI versionText;
+    [SerializeField] TextMeshProUGUI versionText, experimentText, playBtnText;
 
     //Controls for setting default values
     [SerializeField] Slider BGMVolumeSlider, SFXVolumeSlider;
@@ -49,14 +48,25 @@ public class MainMenuManager : MonoBehaviour
         mixer.SetFloat("bgmVol", LinearToDb(BGMVolumeSlider.value));
         mixer.SetFloat("sfxVol", LinearToDb(SFXVolumeSlider.value));
         FEREnabled = FERToggle.isOn;
+        GameManager.FEREnabled = FEREnabled;
 
         //Get values from config if override is true
-        if (experimentManager.OverrideClient)
+        if (ExperimentManager.Instance.OverrideClient)
         {
-            FERToggle.interactable = !experimentManager.LockFER;
-            FEREnabled = experimentManager.IsFEREnabled;
+            FERToggle.interactable = !ExperimentManager.Instance.LockFER;
+            FEREnabled = ExperimentManager.Instance.IsFEREnabled;
             FERToggle.isOn = FEREnabled;
+            GameManager.FEREnabled = FEREnabled;
         }
+
+        if (ExperimentManager.Instance.LockGame)
+        {
+            experimentText.text = $"Experiment Mode\nName: {ExperimentManager.SubjectName}";
+            playBtnText.text = $"Play Game ({ExperimentManager.Instance.CurrentAttempts}/{ExperimentManager.Instance.Attempts})";
+            if (ExperimentManager.Instance.CurrentAttempts >= ExperimentManager.Instance.Attempts && Application.platform != RuntimePlatform.WindowsEditor)
+                playBtnText.GetComponentInParent<Button>().interactable = false;
+        }
+        else experimentText.gameObject.SetActive(false);
 
         StartCoroutine(InitialFade());
         versionText.text = $"Version {Application.version}";
@@ -93,6 +103,8 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnActualStart()
     {
+        GameManager.FEREnabled = FEREnabled;
+        ExperimentManager.Instance.AddAttempt();
         StartCoroutine(FadeOut());
     }
 
@@ -120,6 +132,7 @@ public class MainMenuManager : MonoBehaviour
         fader.CrossFadeAlpha(1, 2, false);
         yield return new WaitForSeconds(2);
         SceneManager.LoadScene("Game");
+
     }
 
     IEnumerator FadeToMenu(Menus to)
@@ -161,6 +174,7 @@ public class MainMenuManager : MonoBehaviour
     public void OnToggleFER(bool active)
     {
         FEREnabled = active;
+        GameManager.FEREnabled = active;
     }
 
     float LinearToDb(float val)

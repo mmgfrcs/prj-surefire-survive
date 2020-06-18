@@ -124,7 +124,6 @@ GameObject:
   - component: {fileID: 126803475}
   - component: {fileID: 126803474}
   - component: {fileID: 126803473}
-  - component: {fileID: 126803477}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -216,28 +215,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &126803477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 126803472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 890201b1523cf29408d42e5b16a76a42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serverAddress: 
-  accessToken: 
-  secret: 
-  attempts: 3
-  FEREnabled: 1
-  finalStageTime: 300
-  difficultyFactor: 1
-  lockGame: 1
-  lockFER: 1
-  overrideClient: 1
 --- !u!1 &157693396
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,6 +373,7 @@ GameObject:
   m_Component:
   - component: {fileID: 599824257}
   - component: {fileID: 599824256}
+  - component: {fileID: 599824258}
   m_Layer: 0
   m_Name: Config
   m_TagString: Untagged
@@ -429,6 +407,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &599824258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599824255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890201b1523cf29408d42e5b16a76a42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverAddress: https://research-server.herokuapp.com/
+  accessToken: 
+  secret: 
+  attempts: 3
+  FEREnabled: 0
+  finalStageTime: 300
+  difficultyFactor: 1
+  lockGame: 1
+  lockFER: 1
+  overrideClient: 1
 --- !u!1 &666629175
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,7 +507,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126803477}
+      - m_Target: {fileID: 599824258}
         m_MethodName: OnContinue
         m_Mode: 2
         m_Arguments:
@@ -1757,7 +1757,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126803477}
+      - m_Target: {fileID: 599824258}
         m_MethodName: OnExit
         m_Mode: 1
         m_Arguments:
