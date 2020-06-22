@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -9,7 +11,7 @@ public class ExperimentManager : MonoBehaviour
 {
     internal static string SubjectName { get; private set; }
     [Header("Server"), SerializeField] string serverAddress;
-    [SerializeField] string accessToken, secret;
+    [SerializeField] string researchID, accessToken, secret;
     [Header("Experiment Constraints"), SerializeField] int attempts = 3;
     [SerializeField] bool FEREnabled = true;
     [SerializeField] float finalStageTime = 300;
@@ -34,8 +36,9 @@ public class ExperimentManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         if (Instance == null) Instance = this;
         else Destroy(this);
-
-        CurrentAttempts = PlayerPrefs.GetInt("attempts", 0);
+        if (Application.platform != RuntimePlatform.WindowsEditor)
+            CurrentAttempts = PlayerPrefs.GetInt("attempts", 0);
+        else CurrentAttempts = 0;
 
         if (ConfigurationManager.Instance.IsConfigReady) SetValuesFromConfig();
     }
@@ -60,7 +63,8 @@ public class ExperimentManager : MonoBehaviour
     public void AddAttempt()
     {
         PlayerPrefs.SetInt("attempts", ++CurrentAttempts);
-        PlayerPrefs.Save();
+        if (Application.platform != RuntimePlatform.WindowsEditor)
+            PlayerPrefs.Save();
     }
 
     public void OnContinue(TMP_InputField input)
@@ -83,5 +87,44 @@ public class ExperimentManager : MonoBehaviour
     IEnumerator LoadNextScene()
     {
         yield return SceneManager.LoadSceneAsync("Main Menu");
+    }
+
+    internal void SendExperimentData(PrintData data)
+    {
+        StartCoroutine(SendData(data));
+    }
+
+    IEnumerator SendData(PrintData data)
+    {
+        data.subjectName = SubjectName;
+
+        UnityWebRequest webRequest = new UnityWebRequest(
+            $"{serverAddress}/api/research/{researchID}/data",
+            "POST",
+            new DownloadHandlerBuffer(),
+            new UploadHandlerRaw(Encoding.UTF8.GetBytes(JsonUtility.ToJson(new SentData(accessToken, data))))
+        );
+        webRequest.SetRequestHeader("Content-Type", "application/json");
+        webRequest.SetRequestHeader("Authorization", $"Bearer {secret}");
+
+        yield return webRequest.SendWebRequest();
+
+        if (webRequest.isNetworkError || webRequest.isHttpError)
+        {
+            Debug.LogWarning($"[ExperimentManager] Error Connecting to {serverAddress}: {(webRequest.error != null ? webRequest.error : webRequest.responseCode.ToString())}");
+        }
+    }
+
+}
+[System.Serializable]
+struct SentData
+{
+    public string token;
+    public PrintData data;
+
+    public SentData(string token, PrintData data)
+    {
+        this.token = token;
+        this.data = data;
     }
 }

@@ -419,9 +419,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 890201b1523cf29408d42e5b16a76a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverAddress: https://research-server.herokuapp.com/
-  accessToken: 
-  secret: 
+  serverAddress: https://research-server.herokuapp.com
+  researchID: a
+  accessToken: a
+  secret: a
   attempts: 3
   FEREnabled: 0
   finalStageTime: 300

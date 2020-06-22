@@ -124,8 +124,10 @@ struct JSONData
 }
 
 [Serializable]
-struct PrintData
+public struct PrintData
 {
+    public string subjectName;
+
     public int enemyCount;
     public Range distance;
     public GameState currentState;
@@ -150,7 +152,7 @@ struct PrintData
 }
 
 [Serializable]
-struct Range
+public struct Range
 {
     public float avg, max, min;
 

@@ -137,11 +137,9 @@ public class GameManager : MonoBehaviour {
             return; 
         }
        
-        if(printData)
-        {
-            printer = new DataPrinter();
-            StartCoroutine(PrintGameDataPeriodic());
-        }
+        if(printData) printer = new DataPrinter();
+
+        StartCoroutine(PrintGameDataPeriodic());
 
         hordeDelay /= ExperimentManager.Instance.DifficultyFactor;
         maxEnemyAtBU1 *= ExperimentManager.Instance.DifficultyFactor;
@@ -598,7 +596,7 @@ public class GameManager : MonoBehaviour {
 
     void Print()
     {
-        printer.Print(printFormat, new PrintData()
+        PrintData data = new PrintData()
         {
             angerVal = anger,
             bigPotionAvailable = BigPotionAvailable,
@@ -634,7 +632,11 @@ public class GameManager : MonoBehaviour {
             varAmmo = varAmmo,
             varFER = varFER,
             varHP = varHP
-        });
+        };
+
+        if (ExperimentManager.Instance.LockGame) ExperimentManager.Instance.SendExperimentData(data);
+
+        if(printData) printer.Print(printFormat, data);
     }
 
 }
