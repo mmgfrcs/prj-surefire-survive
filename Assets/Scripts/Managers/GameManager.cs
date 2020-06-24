@@ -131,17 +131,22 @@ public class GameManager : MonoBehaviour {
     }
     private void Start()
     {
-        print(currentMap != null ? $"Map found on {currentMap.gameObject.name}" : "Map not found. Game cannot start");
+        print(currentMap != null ? $"Map found on {currentMap.gameObject.name}, starting {(!FEREnabled ? "non-" : "")}FER game" : "Map not found. Game cannot start");
         if (currentMap == null) { 
             enabled = false; 
             return; 
         }
        
-        if(printData)
-        {
-            printer = new DataPrinter();
-            StartCoroutine(PrintGameDataPeriodic());
-        }
+        if(printData) printer = new DataPrinter();
+
+        StartCoroutine(PrintGameDataPeriodic());
+
+        hordeDelay /= ExperimentManager.Instance.DifficultyFactor;
+        maxEnemyAtBU1 *= ExperimentManager.Instance.DifficultyFactor;
+        maxEnemyAtBU3 *= ExperimentManager.Instance.DifficultyFactor;
+        spawnRateAtBU1 *= ExperimentManager.Instance.DifficultyFactor;
+        spawnRateAtBU3 *= ExperimentManager.Instance.DifficultyFactor;
+        
         hordeTimer = hordeDelay;
         initHandgunAmmo = player.handgunScript.ammo + player.handgunScript.magazine;
         initRifleAmmo = player.autoGunScript.ammo + player.autoGunScript.magazine;
@@ -162,22 +167,6 @@ public class GameManager : MonoBehaviour {
             objectiveQueue.Enqueue(objective);
         currentObjective = objectiveQueue.Dequeue();
 
-        MakePoints();
-    }
-
-    private void MakePoints()
-    {
-        const int n = 5;
-        const float r = 5;
-
-        float angle = 360f / n;
-
-        for (int i = 0; i < n; i++)
-        {
-            Vector3 start = player.transform.forward * r;
-            start = Quaternion.AngleAxis(angle * i, player.transform.up) * start;
-            new GameObject("Point" + i).transform.position = player.transform.position + start;
-        }
     }
 
     private void Update()
@@ -607,7 +596,7 @@ public class GameManager : MonoBehaviour {
 
     void Print()
     {
-        printer.Print(printFormat, new PrintData()
+        PrintData data = new PrintData()
         {
             angerVal = anger,
             bigPotionAvailable = BigPotionAvailable,
@@ -643,7 +632,11 @@ public class GameManager : MonoBehaviour {
             varAmmo = varAmmo,
             varFER = varFER,
             varHP = varHP
-        });
+        };
+
+        if (ExperimentManager.Instance.LockGame) ExperimentManager.Instance.SendExperimentData(data);
+
+        if(printData) printer.Print(printFormat, data);
     }
 
 }
