@@ -57,6 +57,16 @@ public class ExperimentManager : MonoBehaviour
         lockGame = ConfigurationManager.Instance.CurrentConfig.GetBool("lockGame", true);
         lockFER = ConfigurationManager.Instance.CurrentConfig.GetBool("lockFER", true);
         overrideClient = ConfigurationManager.Instance.CurrentConfig.GetBool("override", true);
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine("Config Set: ");
+        sb.AppendLine("Attempts: " + attempts);
+        sb.AppendLine("FER: " + FEREnabled);
+        sb.AppendLine("Final Stage Time: " + finalStageTime);
+        sb.AppendLine("Difficulty Factor: " + difficultyFactor);
+        sb.AppendLine("Lock Game: " + lockGame);
+        sb.AppendLine("Lock FER: " + lockFER);
+        sb.AppendLine("Override: " + overrideClient);
+        Debug.Log("[ExperimentManager] " + sb.ToString());
         enabled = false;
     }
 

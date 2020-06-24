@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour {
     }
     private void Start()
     {
-        print(currentMap != null ? $"Map found on {currentMap.gameObject.name}" : "Map not found. Game cannot start");
+        print(currentMap != null ? $"Map found on {currentMap.gameObject.name}, starting {(!FEREnabled ? "non-" : "")}FER game" : "Map not found. Game cannot start");
         if (currentMap == null) { 
             enabled = false; 
             return; 
