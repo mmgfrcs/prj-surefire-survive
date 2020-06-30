@@ -123,6 +123,10 @@ public class ExperimentManager : MonoBehaviour
         {
             Debug.LogWarning($"[ExperimentManager] Error Connecting to {serverAddress}: {(webRequest.error != null ? webRequest.error : webRequest.responseCode.ToString())}");
         }
+        else
+        {
+            Debug.Log($"[ExperimentManager] {webRequest.method} {serverAddress} sent: {webRequest.responseCode}");
+        }
     }
 
 }

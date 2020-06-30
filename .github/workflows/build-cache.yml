@@ -21,6 +21,7 @@ jobs:
       with:
         lfs: true
     - name: Get/Restore cache
+      id: cache
       uses: actions/cache@v1.1.0
       with:
         path: Library
@@ -29,11 +30,13 @@ jobs:
         restore-keys: |
           Library-
     - name: Download Affdex.zip and extract
+      if: steps.cache.outputs.cache-hit != 'true'
       run: |
         chmod +x ./CI/AffdexDownload.sh
         ./CI/AffdexDownload.sh
         unzip -o Affdex.zip
     - name: Build with Unity
+      if: steps.cache.outputs.cache-hit != 'true'
       uses: webbertakken/unity-builder@v1.0
       env:
         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
