@@ -36,16 +36,27 @@ public class ExperimentManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         if (Instance == null) Instance = this;
         else Destroy(this);
-        if (Application.platform != RuntimePlatform.WindowsEditor)
-            CurrentAttempts = PlayerPrefs.GetInt("attempts", 0);
-        else CurrentAttempts = 0;
+        CurrentAttempts = Application.platform != RuntimePlatform.WindowsEditor ? PlayerPrefs.GetInt("attempts", 0) : 0;
 
-        if (ConfigurationManager.Instance.IsConfigReady) SetValuesFromConfig();
+        CheckAndSetConfig();
     }
 
     private void Update()
     {
-        if (ConfigurationManager.Instance.IsConfigReady) SetValuesFromConfig();
+        CheckAndSetConfig();
+    }
+
+    void CheckAndSetConfig()
+    {
+        if (ConfigurationManager.Instance.IsConfigReady)
+        {
+            SetValuesFromConfig();
+            if (!lockGame)
+            {
+                SubjectName = "Anonymous";
+                StartCoroutine(LoadNextScene());
+            }
+        }
     }
 
     void SetValuesFromConfig()
