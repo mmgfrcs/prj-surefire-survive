@@ -1,0 +1,246 @@
+﻿@startuml
+enum Menus {
+    MainMenu
+    HowToPlay
+    Credits
+    Options
+}
+enum PrintType {
+    CSV
+    JSON
+    JSONBeautified
+}
+enum GameState {
+    Relax
+    BuildUp1
+    BuildUp2
+    BuildUp3
+    Peak
+    Final
+}
+class MainMenuManager {
+    FEREnabled : bool
+    + OnPlay() : void
+    + OnOptions() : void
+    + OnCredits() : void
+    + SaveOptions() : void
+    + OnMenuExit() : void
+    + OnActualStart() : void
+    + OnGameExit() : void
+    + OnBGMVolumeChange(value): void
+    + OnSFXVolumeChange(value): void
+    + OnToggleFER(active): void
+}
+class GameManager {
+    + debugMode : bool
+    + printData : bool
+    + printInterval : float
+    + hordeDelay : float
+    + hordeTime : float
+    + buildUp1Probability : float
+    + buildUp2Probability : float
+    + probabilityChange : float
+    + maxEnemyAtBU1 : float
+    + maxEnemyAtBU3 : float
+    + spawnRateAtBU1 : float
+    + spawnRateAtBU3 : float
+    + timeToMax : float
+    + timeToMin : float
+    + joyCurve  : AnimationCurve
+    + angerCurve : AnimationCurve
+    + fearCurve : AnimationCurve
+    + surpriseCurve : AnimationCurve
+    + disgustCurve : AnimationCurve
+    + rateOfMaxEnemyChange : RateOfChange 
+    + rateOfSpawnRateChange : RateOfChange
+    + detector : Detector
+    +  <<event>> OnGameEnd : Action
+    - ProcessStates() : void
+    - CalculateStressLevel() : void
+    - ProcessInput() : void
+    - UpdateUI() : void
+    + CompleteObjective(data) : void
+    + EnemyDie(e): void
+    + PlayerDie() : void
+    + EndGame(victory): void
+    + GetScoresInCategory(category): List<(string, float)>
+    + Announce(text): void
+    + StartBoss() : void
+    + GetItem(item): bool
+    + UseItem(item): void
+    + SetItemBarValue(item, value): void
+    + SetItemBarVisibility(item, visible): void
+    - PrintGameDataPeriodic() : IEnumerator
+    - Print() : void
+}
+class RateOfChange <<struct>> {
+    + toMax : AnimationCurve
+    + toMin : AnimationCurve
+}
+abstract class ObjectiveBase {
+    # objectiveName : string
+    # objectiveText : string
+    # nextPartUponCompletion : bool
+    # scoreReward : float
+    + ObjectiveName : string
+    + ObjectiveText : string
+    + GotoNextPartUponCompletion : bool
+    + ScoreReward : float
+    + {abstract} Prepare() : void
+    + {abstract} GetObjectiveCompletion(data) : bool
+}
+class DataPrinter {
+    {static} fileNo : int
+    + NextFile() : void
+    + Print(type, data): void
+    - Print(type): void
+    - GetFilePath(extension, fileName, basePath): string
+}
+class Map {
+    + spawnRate : float
+    + maximumEnemy : int
+    + EnemyCount : int
+    + AverageEnemyHP : float
+    + AverageEnemyDistance : float
+    + MaxEnemyDistance : float
+    + MinEnemyDistance : float
+    - CalculateStatistics() : void
+    - CheckSpawnPointVisible(playerPos:Vector3, spawnPos:Vector3) : bool
+    - ItemSpawn(pos): void
+    - ItemSpawn(pos, type): void
+    - EnemyDie(e): void
+}
+class SpawnPosition {
+    spawns : int
+    canSpawnHere : bool
+    + SpawnPosition(t:Transform)
+}
+class ConsumableIcon {
+    + SetBarValue(value): void
+    + DisableBar() : void
+    + EnableBar() : void
+    + Disable() : void
+    + Enable() : void
+}
+class GameScore {
+    + enemyScores : EnemyScores[]
+    + victoryScore : float
+    + scorePerRifleAmmo : float
+    + scorePerHandgunAmmo : float
+    + unusedBigPotScore : float
+    + unusedSmallPotScore : float
+    + unusedMedkitScore : float
+    + unusedGrenadeScore : float
+    + AddEnemyKillEntry(type): void
+    + AddEntry(category, entry): void
+    + AddEntry(category, name, value): void
+    + FinalizeScore(victory, rifleAmmo, handgunAmmo, bigPot, smallPot, medkit, grenade): float
+    + GetTotalScore() : float
+    + GetPerCategoryScore() : List<(string, float)>
+    + GetPerCategoryScore(allScores) : List<(string, float)>
+    + GetAllScores() : List<(string, string, float)>
+    + GetScoresInCategory(category): List<(string, float)>
+}
+class EnemyScores <<struct>> {
+    + type : EnemyType
+    + score : float
+}
+class ScoreEntry {
+    + entryName : string
+    + value : float
+}
+class CarePackageSettings {
+    + deliveryAmount : int
+    + GetNextDelivery() : CarePackageDelivery
+}
+class CarePackageDelivery {
+    + time : float
+    + location : Transform
+}
+
+class Entity {
+    + CurrentHealth : float
+    + Damage(amount): void
+    # Die() : void
+}
+class Player {
+    - autogunMode : bool
+    - handgunScript : HandgunScriptLPFP
+    - autogunScript : AutomaticGunScriptLPFP
+    + criticalHPRatio : float
+    + CanShoot : bool
+    + IsRifleEquipped : bool
+    + RifleTotalAmmo : int
+    + HandgunTotalAmmo : int
+    - GameManager_OnGameEnd() : void
+    # <<override>> Die() : void
+    + <<override>> Damage(amount): void
+    - Raycast() : void
+    - TryOpenChest(c): bool
+    - FillRifleAmmo(c): void
+    - FillHandgunAmmo(c): void
+    - ProcessInput() : void
+    - SwitchWeapon() : void
+    - UpdateUI() : void
+    - HealHP(amount): void
+    - RegenHP(amount, time, bigPot): void
+    - Regenerate(bigPot): IEnumerator
+}
+class Detector {
+    + startOnWake : bool = true
+    + IsRunning : bool <<get>>
+    + discrete : bool
+    + StartDetector() : void
+    + ProcessFrame(frame): void
+    + StopDetector() : void
+    + Stop() : void
+    + SetExpressionState(expression, expressionState): void
+    + SetEmotionState(emotion, emotionState): void
+}
+enum State {
+    STOPPED,
+    STARTING,
+    STARTED,
+}
+enum EnemyType {
+    Mob
+    FastMob
+    EliteMob
+    Turret
+    Boss
+}
+class ExpressionManager {
+    + {static} FaceFound : bool <<get>>
+    + Face : FaceResults
+}
+class GameOverManager {
+    animationTime : float = 2
+    victoryString : string = "Congratulations!"
+    defeatString : string = "Game Over"
+    waitTime : float
+    + {static} ShowPanel(victory, scores, categoryOverviewFunc, perCategoryFunc) : void
+    + OnBack() : void
+}
+MainMenuManager "1" o-> "1" Menus
+MainMenuManager "1" --> "1" GameManager
+Map "1...*" *--d> "1" SpawnPosition
+Entity <|-- Player
+Detector +-- State
+Detector <|-- ExpressionManager
+CarePackageSettings "1" -u-> "0...*" CarePackageDelivery
+GameScore "1" o--> "1" EnemyScores
+GameScore "1" *--> "1" ScoreEntry
+EnemyScores "1" o-d-> "1" EnemyType
+GameManager "1" o-> "1" PrintType
+GameManager "1" <--> "1" Player
+GameManager "1" <--r--> "1" CarePackageSettings
+GameManager "1" -l-> "1" GameScore
+GameManager "1" o--> "1" GameState
+GameManager "1" -l-> "1" RateOfChange
+GameManager "1" <-r-> "1" Detector
+GameManager "1" --> "1" ConsumableIcon
+GameManager "1" <---> "1" Map
+GameManager "1" *--> "1...*" ObjectiveBase
+GameManager "1" --> "1" DataPrinter
+GameManager "1" ---> "1" GameOverManager
+@enduml
