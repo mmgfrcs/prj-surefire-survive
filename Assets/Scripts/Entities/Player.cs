@@ -214,21 +214,21 @@ public class Player : Entity {
         else CanRun = true;
         */
         
-        if (Input.GetButtonDown("Item1") || Input.GetAxisRaw("Item1 Axis") < -0.1f && gameManager.BigPotionAvailable)
+        if ((Input.GetButtonDown("Item1") || Input.GetAxisRaw("Item1 Axis") < -0.1f) && gameManager.BigPotionAvailable)
         {
             GameItem item = new GameItem(GameFoundationSettings.database.gameItemCatalog.GetGameItemDefinition("bigHP"));
             gameManager.UseItem(ChestType.BigPotion);
             RegenHP(item.GetStatFloat(GameManager.DEF_HEAL), item.GetStatFloat("regenAmount"), true);
         }
 
-        if (Input.GetButtonDown("Item2") || Input.GetAxisRaw("Item2 Axis") > 0.1f && gameManager.SmallPotionAvailable)
+        if ((Input.GetButtonDown("Item2") || Input.GetAxisRaw("Item2 Axis") > 0.1f) && gameManager.SmallPotionAvailable)
         {
             GameItem item = new GameItem(GameFoundationSettings.database.gameItemCatalog.GetGameItemDefinition("smallHP"));
             gameManager.UseItem(ChestType.SmallPotion);
             RegenHP(item.GetStatFloat(GameManager.DEF_HEAL), item.GetStatFloat("regenAmount"));
         }
 
-        if (Input.GetButtonDown("Item3") || Input.GetAxisRaw("Item3 Axis") > 0.1f && gameManager.MedkitAvailable)
+        if ((Input.GetButtonDown("Item3") || Input.GetAxisRaw("Item3 Axis") > 0.1f) && gameManager.MedkitAvailable)
         {
             GameItem item = new GameItem(GameFoundationSettings.database.gameItemCatalog.GetGameItemDefinition("medkit"));
             gameManager.UseItem(ChestType.Medkit);

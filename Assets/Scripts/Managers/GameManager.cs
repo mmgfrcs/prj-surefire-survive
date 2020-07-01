@@ -17,67 +17,69 @@ public class GameManager : MonoBehaviour {
     [Header("Debug"), SerializeField] public bool debugMode = true;
     [SerializeField] public bool printData = true;
     [SerializeField] public float printInterval = 1f;
-    [SerializeField] PrintType printFormat = PrintType.CSV;
-    [SerializeField] TextMeshProUGUI debugText;
-    [SerializeField] TextMeshProUGUI objectiveDebugText, timerDebugText;
+    [SerializeField] private PrintType printFormat = PrintType.CSV;
+    [SerializeField] private TextMeshProUGUI debugText;
+    [SerializeField] private TextMeshProUGUI objectiveDebugText, timerDebugText;
 
-    [Header("Game - General"), SerializeField] Player player; 
-    [SerializeField] ObjectiveBase[] objectives;
-    [SerializeField] AudioSource dividerSource;
-    [SerializeField] GameObject[] dividers;
-    [SerializeField] GameObject finalWall;
-    [SerializeField] NavMeshSurface pt1Surface;
-    [SerializeField] NavMeshSurface pt2Surface;
-    [SerializeField] float hordeDelay = 100, hordeTime = 30;
-    [SerializeField] CarePackageSettings carePackageSettings;
-    [SerializeField] GameScore scoreConfiguration;
+    [Header("Game - General"), SerializeField]
+    private Player player; 
+    [SerializeField] private ObjectiveBase[] objectives;
+    [SerializeField] private AudioSource dividerSource;
+    [SerializeField] private GameObject[] dividers;
+    [SerializeField] private GameObject finalWall;
+    [SerializeField] private NavMeshSurface pt1Surface;
+    [SerializeField] private NavMeshSurface pt2Surface;
+    [SerializeField] private float hordeDelay = 100, hordeTime = 30;
+    [SerializeField] private CarePackageSettings carePackageSettings;
+    [SerializeField] private GameScore scoreConfiguration;
 
-    [Header("Game - Meta AI"), SerializeField] GameState defaultState = GameState.Relax;
-    [SerializeField] float buildUp1Probability = 0.334f;
-    [SerializeField] float buildUp2Probability = 0.333f;
-    [SerializeField] float probabilityChange = 0.033f;
-    [SerializeField] float maxEnemyAtBU1 = 100, maxEnemyAtBU3 = 25f, spawnRateAtBU1 = 0.667f, spawnRateAtBU3 = 0.167f;
-    [SerializeField] float timeToMax = 30, timeToMin = 15;
-    [SerializeField] AnimationCurve joyCurve, angerCurve, fearCurve, surpriseCurve, disgustCurve;
-    [SerializeField] RateOfChange rateOfMaxEnemyChange, rateOfSpawnRateChange;
-    [SerializeField] Detector detector;
+    [Header("Game - Meta AI"), SerializeField]
+    private GameState defaultState = GameState.Relax;
+    [SerializeField] private float buildUp1Probability = 0.334f;
+    [SerializeField] private float buildUp2Probability = 0.333f;
+    [SerializeField] private float probabilityChange = 0.033f;
+    [SerializeField] private float maxEnemyAtBU1 = 100, maxEnemyAtBU3 = 25f, spawnRateAtBU1 = 0.667f, spawnRateAtBU3 = 0.167f;
+    [SerializeField] private float timeToMax = 30, timeToMin = 15;
+    [SerializeField] private AnimationCurve joyCurve, angerCurve, fearCurve, surpriseCurve, disgustCurve;
+    [SerializeField] private RateOfChange rateOfMaxEnemyChange, rateOfSpawnRateChange;
+    [SerializeField] private Detector detector;
 
-    [Header("UI"), SerializeField] TextMeshProUGUI timerText;
-    [SerializeField] TextMeshProUGUI objectiveText;
-    [SerializeField] GameObject logObject;
-    [SerializeField] Transform logPanel, logPanelDebug;
-    [SerializeField] ConsumableIcon bigPotionIcon;
-    [SerializeField] ConsumableIcon smallPotionIcon;
-    [SerializeField] ConsumableIcon medkitIcon;
-    [SerializeField] ConsumableIcon grenadeIcon;
-    [SerializeField] Image faceStatusImage;
+    [Header("UI"), SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private TextMeshProUGUI objectiveText;
+    [SerializeField] private GameObject logObject;
+    [SerializeField] private Transform logPanel, logPanelDebug;
+    [SerializeField] private ConsumableIcon bigPotionIcon;
+    [SerializeField] private ConsumableIcon smallPotionIcon;
+    [SerializeField] private ConsumableIcon medkitIcon;
+    [SerializeField] private ConsumableIcon grenadeIcon;
+    [SerializeField] private Image faceStatusImage;
 
     public static GameManager Instance;
     public static bool FEREnabled;
 
-    float hordeTimer;
+    private float hordeTimer;
 
     //Gameplay
-    Map currentMap;
-    float playerStressLevel;
-    int initRifleAmmo, initHandgunAmmo, totalInitAmmo;
-    float stateWeight = 0;
-    float startingMaxEnemy = 0, startingSpawnRate = 0;
+    private Map currentMap;
+    private float playerStressLevel;
+    private int initRifleAmmo, initHandgunAmmo, totalInitAmmo;
+    private float stateWeight = 0;
+    private float startingMaxEnemy = 0, startingSpawnRate = 0;
 
     //Objective
-    Queue<ObjectiveBase> objectiveQueue = new Queue<ObjectiveBase>();
-    ObjectiveBase currentObjective;
+    private Queue<ObjectiveBase> objectiveQueue = new Queue<ObjectiveBase>();
+    private ObjectiveBase currentObjective;
 
     //Statistics
-    int enemyDefeated = 0;
-    int bossDefeated = 0;
-    float flowPerSecond = 0;
+    private int enemyDefeated = 0;
+    private int bossDefeated = 0;
+    private float flowPerSecond = 0;
 
     private float varHP;
     private float varAmmo;
     private float varFER;
     private float stressRate;
-    float joy = 0, anger = 0, fear = 0, disgust = 0, sadness = 0, surprise = 0, valence = 0, contempt = 0, engagement = 0;
+    private float joy = 0, anger = 0, fear = 0, disgust = 0, sadness = 0, surprise = 0, valence = 0, contempt = 0, engagement = 0;
 
     //Stat Definition
     public const string DEF_HEALTH = "health";
@@ -111,10 +113,10 @@ public class GameManager : MonoBehaviour {
     public bool SmallPotionAvailable { get; private set; } = true;
     public bool MedkitAvailable { get; private set; } = true;
 
-    bool BGMState = true;
+    private bool BGMState = true;
     internal bool gameEnd = false;
-    DataPrinter printer;
-    float[] buildUpProbabilities = new float[2];
+    private DataPrinter printer;
+    private float[] buildUpProbabilities = new float[2];
     public float GameTime { get; private set; }
 
     private void Awake()
@@ -131,17 +133,22 @@ public class GameManager : MonoBehaviour {
     }
     private void Start()
     {
-        print(currentMap != null ? $"Map found on {currentMap.gameObject.name}" : "Map not found. Game cannot start");
+        print(currentMap != null ? $"Map found on {currentMap.gameObject.name}, starting {(!FEREnabled ? "non-" : "")}FER game" : "Map not found. Game cannot start");
         if (currentMap == null) { 
             enabled = false; 
             return; 
         }
        
-        if(printData)
-        {
-            printer = new DataPrinter();
-            StartCoroutine(PrintGameDataPeriodic());
-        }
+        if(printData) printer = new DataPrinter();
+
+        StartCoroutine(PrintGameDataPeriodic());
+
+        hordeDelay /= ExperimentManager.Instance.DifficultyFactor;
+        maxEnemyAtBU1 *= ExperimentManager.Instance.DifficultyFactor;
+        maxEnemyAtBU3 *= ExperimentManager.Instance.DifficultyFactor;
+        spawnRateAtBU1 *= ExperimentManager.Instance.DifficultyFactor;
+        spawnRateAtBU3 *= ExperimentManager.Instance.DifficultyFactor;
+        
         hordeTimer = hordeDelay;
         initHandgunAmmo = player.handgunScript.ammo + player.handgunScript.magazine;
         initRifleAmmo = player.autoGunScript.ammo + player.autoGunScript.magazine;
@@ -162,22 +169,6 @@ public class GameManager : MonoBehaviour {
             objectiveQueue.Enqueue(objective);
         currentObjective = objectiveQueue.Dequeue();
 
-        MakePoints();
-    }
-
-    private void MakePoints()
-    {
-        const int n = 5;
-        const float r = 5;
-
-        float angle = 360f / n;
-
-        for (int i = 0; i < n; i++)
-        {
-            Vector3 start = player.transform.forward * r;
-            start = Quaternion.AngleAxis(angle * i, player.transform.up) * start;
-            new GameObject("Point" + i).transform.position = player.transform.position + start;
-        }
     }
 
     private void Update()
@@ -322,15 +313,15 @@ public class GameManager : MonoBehaviour {
     {
         if (ExpressionManager.FaceResults != null)
         {
-            ExpressionManager.FaceResults.Emotions.TryGetValue(Affdex.Emotions.Joy, out joy);
-            ExpressionManager.FaceResults.Emotions.TryGetValue(Affdex.Emotions.Anger, out anger);
-            ExpressionManager.FaceResults.Emotions.TryGetValue(Affdex.Emotions.Fear, out fear);
-            ExpressionManager.FaceResults.Emotions.TryGetValue(Affdex.Emotions.Disgust, out disgust);
-            ExpressionManager.FaceResults.Emotions.TryGetValue(Affdex.Emotions.Sadness, out sadness);
-            ExpressionManager.FaceResults.Emotions.TryGetValue(Affdex.Emotions.Surprise, out surprise);
-            ExpressionManager.FaceResults.Emotions.TryGetValue(Affdex.Emotions.Valence, out valence);
-            ExpressionManager.FaceResults.Emotions.TryGetValue(Affdex.Emotions.Contempt, out contempt);
-            ExpressionManager.FaceResults.Emotions.TryGetValue(Affdex.Emotions.Engagement, out engagement);
+            ExpressionManager.FaceResults.Emotions.TryGetValue(Emotions.Joy, out joy);
+            ExpressionManager.FaceResults.Emotions.TryGetValue(Emotions.Anger, out anger);
+            ExpressionManager.FaceResults.Emotions.TryGetValue(Emotions.Fear, out fear);
+            ExpressionManager.FaceResults.Emotions.TryGetValue(Emotions.Disgust, out disgust);
+            ExpressionManager.FaceResults.Emotions.TryGetValue(Emotions.Sadness, out sadness);
+            ExpressionManager.FaceResults.Emotions.TryGetValue(Emotions.Surprise, out surprise);
+            ExpressionManager.FaceResults.Emotions.TryGetValue(Emotions.Valence, out valence);
+            ExpressionManager.FaceResults.Emotions.TryGetValue(Emotions.Contempt, out contempt);
+            ExpressionManager.FaceResults.Emotions.TryGetValue(Emotions.Engagement, out engagement);
         }
 
         float varHPWeight = 1;
@@ -594,7 +585,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    IEnumerator PrintGameDataPeriodic()
+    private IEnumerator PrintGameDataPeriodic()
     {
         while(!gameEnd)
         {
@@ -605,9 +596,9 @@ public class GameManager : MonoBehaviour {
         Print();
     }
 
-    void Print()
+    private void Print()
     {
-        printer.Print(printFormat, new PrintData()
+        PrintData data = new PrintData()
         {
             angerVal = anger,
             bigPotionAvailable = BigPotionAvailable,
@@ -643,7 +634,11 @@ public class GameManager : MonoBehaviour {
             varAmmo = varAmmo,
             varFER = varFER,
             varHP = varHP
-        });
+        };
+
+        if (ExperimentManager.Instance.LockGame) ExperimentManager.Instance.SendExperimentData(data);
+
+        if(printData) printer.Print(printFormat, data);
     }
 
 }

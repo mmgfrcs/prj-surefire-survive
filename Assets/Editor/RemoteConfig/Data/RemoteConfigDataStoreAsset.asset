@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469c24fdb3bd6431b92cc1465bd9166b, type: 3}
+  m_Name: RemoteConfigDataStoreAsset
+  m_EditorClassIdentifier: 
+  configId: 3ebc9347-b836-4c4d-831b-d300ccdd8e1b
+  currentEnvironment: Default
+  currentEnvironmentId: 69412c59-5f93-4d38-8ce4-16fbf26b887f
+  currentEnvironmentIsDefault: 1
+  addedRulesIDs: []
+  updatedRulesIDs: []
+  deletedRulesIDs: []
+  _rsKeyList: "[\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"8bad5370-01a4-40fa-958a-a46b21e9978e\"\r\n
+    \   },\r\n    \"rs\": {\r\n      \"key\": \"ferEnabled\",\r\n      \"value\":
+    true,\r\n      \"type\": \"bool\"\r\n    }\r\n  },\r\n  {\r\n    \"metadata\":
+    {\r\n      \"entityId\": \"52d1d146-19c6-46b9-8bd6-1b84d5f50d3f\"\r\n    },\r\n
+    \   \"rs\": {\r\n      \"key\": \"finalStageTime\",\r\n      \"value\": 300.0,\r\n
+    \     \"type\": \"float\"\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"5b83daab-9d19-4a60-b37a-376d31fca7c5\"\r\n    },\r\n    \"rs\": {\r\n      \"key\":
+    \"difficultyFactor\",\r\n      \"value\": 1.0,\r\n      \"type\": \"float\"\r\n
+    \   }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"a9b6731a-c51d-4b37-85a9-a205ffdfd50e\"\r\n
+    \   },\r\n    \"rs\": {\r\n      \"key\": \"lockGame\",\r\n      \"value\": true,\r\n
+    \     \"type\": \"bool\"\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"a696e0bc-cb5a-4af7-b5a8-60c4eb6bdbcb\"\r\n    },\r\n    \"rs\": {\r\n      \"key\":
+    \"lockFER\",\r\n      \"value\": true,\r\n      \"type\": \"bool\"\r\n    }\r\n
+    \ },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"2a4ae95a-8776-41ff-a4e5-a92747ace0f1\"\r\n
+    \   },\r\n    \"rs\": {\r\n      \"key\": \"attempts\",\r\n      \"value\": 3,\r\n
+    \     \"type\": \"int\"\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"7e7e7acb-b28b-4711-a385-a669fb623272\"\r\n    },\r\n    \"rs\": {\r\n      \"key\":
+    \"override\",\r\n      \"value\": true,\r\n      \"type\": \"bool\"\r\n    }\r\n
+    \ }\r\n]"
+  _rsLastCachedKeyList: "[\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"8bad5370-01a4-40fa-958a-a46b21e9978e\"\r\n
+    \   },\r\n    \"rs\": {\r\n      \"key\": \"ferEnabled\",\r\n      \"value\":
+    true,\r\n      \"type\": \"bool\"\r\n    }\r\n  },\r\n  {\r\n    \"metadata\":
+    {\r\n      \"entityId\": \"52d1d146-19c6-46b9-8bd6-1b84d5f50d3f\"\r\n    },\r\n
+    \   \"rs\": {\r\n      \"key\": \"finalStageTime\",\r\n      \"value\": 300.0,\r\n
+    \     \"type\": \"float\"\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"5b83daab-9d19-4a60-b37a-376d31fca7c5\"\r\n    },\r\n    \"rs\": {\r\n      \"key\":
+    \"difficultyFactor\",\r\n      \"value\": 1.0,\r\n      \"type\": \"float\"\r\n
+    \   }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"a9b6731a-c51d-4b37-85a9-a205ffdfd50e\"\r\n
+    \   },\r\n    \"rs\": {\r\n      \"key\": \"lockGame\",\r\n      \"value\": true,\r\n
+    \     \"type\": \"bool\"\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"a696e0bc-cb5a-4af7-b5a8-60c4eb6bdbcb\"\r\n    },\r\n    \"rs\": {\r\n      \"key\":
+    \"lockFER\",\r\n      \"value\": true,\r\n      \"type\": \"bool\"\r\n    }\r\n
+    \ },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"2a4ae95a-8776-41ff-a4e5-a92747ace0f1\"\r\n
+    \   },\r\n    \"rs\": {\r\n      \"key\": \"attempts\",\r\n      \"value\": 3,\r\n
+    \     \"type\": \"int\"\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"7e7e7acb-b28b-4711-a385-a669fb623272\"\r\n    },\r\n    \"rs\": {\r\n      \"key\":
+    \"override\",\r\n      \"value\": true,\r\n      \"type\": \"bool\"\r\n    }\r\n
+    \ }\r\n]"
+  _environments: "[\r\n  {\r\n    \"projectId\": \"ab9be9b6-9d46-46a9-910d-5088e2e6c39c\",\r\n
+    \   \"name\": \"Default\",\r\n    \"id\": \"69412c59-5f93-4d38-8ce4-16fbf26b887f\",\r\n
+    \   \"createdAt\": \"2020-06-06T10:07:18Z\",\r\n    \"updatedAt\": \"2020-06-06T10:14:11Z\",\r\n
+    \   \"isDefault\": true\r\n  }\r\n]"
+  _rulesList: "[\r\n  {\r\n    \"id\": \"301c7ca6-013f-42ae-8f58-46f460b8a593\",\r\n
+    \   \"name\": \"Experiment 2\",\r\n    \"type\": \"segmentation\",\r\n    \"condition\":
+    \"\",\r\n    \"rolloutPercentage\": 100,\r\n    \"startDate\": \"\",\r\n    \"endDate\":
+    \"\",\r\n    \"priority\": 1000,\r\n    \"enabled\": false,\r\n    \"value\":
+    [\r\n      {\r\n        \"metadata\": {\r\n          \"entityId\": \"8bad5370-01a4-40fa-958a-a46b21e9978e\"\r\n
+    \       },\r\n        \"rs\": {\r\n          \"key\": \"ferEnabled\",\r\n          \"value\":
+    false,\r\n          \"type\": \"bool\"\r\n        }\r\n      }\r\n    ]\r\n  }\r\n]"
+  _lastCachedRulesList: "[\r\n  {\r\n    \"id\": \"301c7ca6-013f-42ae-8f58-46f460b8a593\",\r\n
+    \   \"name\": \"Experiment 2\",\r\n    \"type\": \"segmentation\",\r\n    \"condition\":
+    \"\",\r\n    \"rolloutPercentage\": 100,\r\n    \"startDate\": \"\",\r\n    \"endDate\":
+    \"\",\r\n    \"priority\": 1000,\r\n    \"enabled\": false,\r\n    \"value\":
+    [\r\n      {\r\n        \"metadata\": {\r\n          \"entityId\": \"8bad5370-01a4-40fa-958a-a46b21e9978e\"\r\n
+    \       },\r\n        \"rs\": {\r\n          \"key\": \"ferEnabled\",\r\n          \"value\":
+    false,\r\n          \"type\": \"bool\"\r\n        }\r\n      }\r\n    ]\r\n  }\r\n]"

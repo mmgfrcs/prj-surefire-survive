@@ -4,43 +4,111 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Audio;
+
+public enum Menus
+{
+    MainMenu, HowToPlay, Credits, Options
+}
 
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] bool FEREnabled = true;
-    [SerializeField] CanvasGroup mainUI;
-    [SerializeField] CanvasGroup howToPlayUI, creditsUI;
+    [SerializeField] AudioMixer mixer;
+    [SerializeField] CanvasGroup mainUI, howToPlayUI, creditsUI, optionsUI;
     [SerializeField] Image fader;
-    [SerializeField] TextMeshProUGUI versionText;
-    // Start is called before the first frame update
+    [SerializeField] TextMeshProUGUI versionText, experimentText, playBtnText;
+
+    //Controls for setting default values
+    [SerializeField] Slider BGMVolumeSlider, SFXVolumeSlider;
+    [SerializeField] Toggle FERToggle;
+
+    Menus currentMenu = Menus.MainMenu;
     void Start()
     {
+        //Setup Scene
+        //Activate Screens
+        mainUI.gameObject.SetActive(true);
+        howToPlayUI.gameObject.SetActive(true);
+        creditsUI.gameObject.SetActive(true);
+        optionsUI.gameObject.SetActive(true);
+
+        //Setup alpha
+        mainUI.alpha = 1;
+        howToPlayUI.alpha = 0;
+        creditsUI.alpha = 0;
+        optionsUI.alpha = 0;
+
+        //Get values for Options
+        BGMVolumeSlider.value = PlayerPrefs.GetFloat("BGM", DbToLinear(-3));
+        SFXVolumeSlider.value = PlayerPrefs.GetFloat("SFX", DbToLinear(0));
+        FERToggle.isOn = PlayerPrefs.GetInt("FER", FEREnabled ? 1 : 0) == 1;
+
+        //Apply values
+        mixer.SetFloat("bgmVol", LinearToDb(BGMVolumeSlider.value));
+        mixer.SetFloat("sfxVol", LinearToDb(SFXVolumeSlider.value));
+        FEREnabled = FERToggle.isOn;
+        GameManager.FEREnabled = FEREnabled;
+
+        //Get values from config if override is true
+        if (ExperimentManager.Instance.OverrideClient)
+        {
+            FERToggle.interactable = !ExperimentManager.Instance.LockFER;
+            FEREnabled = ExperimentManager.Instance.IsFEREnabled;
+            FERToggle.isOn = FEREnabled;
+            GameManager.FEREnabled = FEREnabled;
+        }
+
+        if (ExperimentManager.Instance.LockGame)
+        {
+            experimentText.text = $"Experiment Mode\nName: {ExperimentManager.SubjectName}";
+            playBtnText.text = $"Play Game ({ExperimentManager.Instance.CurrentAttempts}/{ExperimentManager.Instance.Attempts})";
+            if (ExperimentManager.Instance.CurrentAttempts >= ExperimentManager.Instance.Attempts && Application.platform != RuntimePlatform.WindowsEditor)
+                playBtnText.GetComponentInParent<Button>().interactable = false;
+        }
+        else experimentText.gameObject.SetActive(false);
+
         StartCoroutine(InitialFade());
-        versionText.text = $"Version {Application.version}-{(FEREnabled ? "F" : "NF")}";
+        versionText.text = $"Version {Application.version}";
     }
 
     // Update is called once per frame
     public void OnPlay()
     {
-        StartCoroutine(FadeToMenu(false));
+        StartCoroutine(FadeToMenu(Menus.HowToPlay));
+    }
+
+    public void OnOptions()
+    {
+        StartCoroutine(FadeToMenu(Menus.Options));
     }
 
     public void OnCredits()
     {
-        StartCoroutine(FadeToMenu(true));
+        StartCoroutine(FadeToMenu(Menus.Credits));
+    }
+
+    public void SaveOptions()
+    {
+        PlayerPrefs.SetFloat("BGM", BGMVolumeSlider.value);
+        PlayerPrefs.SetFloat("SFX", SFXVolumeSlider.value);
+        PlayerPrefs.SetInt("FER", FERToggle.isOn ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
+    public void OnMenuExit()
+    {
+        StartCoroutine(FadeToMenu(Menus.MainMenu));
     }
 
     public void OnActualStart()
     {
+        GameManager.FEREnabled = FEREnabled;
+        ExperimentManager.Instance.AddAttempt();
         StartCoroutine(FadeOut());
     }
 
-    public void OnCreditsExit()
-    {
-        StartCoroutine(FadeToMainUI(true));
-    }
-
-    public void OnExit()
+    public void OnGameExit()
     {
         Application.Quit();
     }
@@ -64,57 +132,61 @@ public class MainMenuManager : MonoBehaviour
         fader.CrossFadeAlpha(1, 2, false);
         yield return new WaitForSeconds(2);
         SceneManager.LoadScene("Game");
+
     }
 
-    IEnumerator FadeToMenu(bool creditsMenu)
+    IEnumerator FadeToMenu(Menus to)
     {
-        if(creditsMenu)
+        CanvasGroup source, dest;
+
+        //Figure out source and destination Menu
+        if (currentMenu == Menus.HowToPlay) source = howToPlayUI;
+        else if (currentMenu == Menus.Credits) source = creditsUI;
+        else if (currentMenu == Menus.Options) source = optionsUI;
+        else source = mainUI;
+        if (to == Menus.HowToPlay) dest = howToPlayUI;
+        else if (to == Menus.Credits) dest = creditsUI;
+        else if (to == Menus.Options) dest = optionsUI;
+        else dest = mainUI;
+
+        //Start fading menu
+        source.blocksRaycasts = false;
+        while (source.alpha > 0)
         {
-            mainUI.blocksRaycasts = false;
-            while (mainUI.alpha > 0)
-            {
-                mainUI.alpha -= Time.deltaTime;
-                creditsUI.alpha += Time.deltaTime;
-                yield return null;
-            }
-            creditsUI.blocksRaycasts = true;
+            source.alpha -= Time.deltaTime;
+            dest.alpha += Time.deltaTime;
+            yield return null;
         }
-        else
-        {
-            mainUI.blocksRaycasts = false;
-            while(mainUI.alpha > 0)
-            {
-                mainUI.alpha -= Time.deltaTime;
-                howToPlayUI.alpha += Time.deltaTime;
-                yield return null;
-            }
-            howToPlayUI.blocksRaycasts = true;
-        }
+        dest.blocksRaycasts = true;
+        currentMenu = to;
     }
 
-    IEnumerator FadeToMainUI(bool creditsMenu)
+    public void OnBGMVolumeChange(float value)
     {
-        if (creditsMenu)
-        {
-            creditsUI.blocksRaycasts = false;
-            while (creditsUI.alpha > 0)
-            {
-                mainUI.alpha += Time.deltaTime;
-                creditsUI.alpha -= Time.deltaTime;
-                yield return null;
-            }
-            mainUI.blocksRaycasts = true;
-        }
+        mixer.SetFloat("bgmVol", LinearToDb(value));
+    }
+
+    public void OnSFXVolumeChange(float value)
+    {
+        mixer.SetFloat("sfxVol", LinearToDb(value));
+    }
+
+    public void OnToggleFER(bool active)
+    {
+        FEREnabled = active;
+        GameManager.FEREnabled = active;
+    }
+
+    float LinearToDb(float val)
+    {
+        if (val != 0)
+            return 20.0f * Mathf.Log10(val);
         else
-        {
-            howToPlayUI.blocksRaycasts = false;
-            while (howToPlayUI.alpha > 0)
-            {
-                mainUI.alpha += Time.deltaTime;
-                howToPlayUI.alpha -= Time.deltaTime;
-                yield return null;
-            }
-            mainUI.blocksRaycasts = true;
-        }
+            return -144.0f;
+    }
+
+    float DbToLinear(float val)
+    {
+        return Mathf.Pow(10.0f, val / 20.0f);
     }
 }
